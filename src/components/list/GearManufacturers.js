@@ -1,29 +1,18 @@
-import { useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
-import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 
-function GearManufacturers() {
-    const[data, setData] = useState([]);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = ()=> {
-        GearManufacturerService.getMany()
-            .then((response) => {
-                setData(response);
-            });
-    }
-
+function GearManufacturers({data}) {
     return (
-        <>
-        {
-            data.map((listItem) => {
-                <div key={listItem.ManufacturerId}>{listItem.ManufacturerName}</div>
-            })
-        }
-        </>
+        <div className={mgcStyles.pageContent}>
+            GEAR MANUFACTURERS:
+
+            <div>
+                {
+                    data.map((listItem) => {
+                       return <div key={listItem.key} className={mgcStyles.pageContent}>{listItem.value.manufacturerName}</div>
+                    })
+                }
+            </div>
+        </div>
     );
 }
 
