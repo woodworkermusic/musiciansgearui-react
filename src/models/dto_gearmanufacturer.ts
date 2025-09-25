@@ -1,9 +1,10 @@
 import { EntityBase } from './entitybase.ts';
 
-export class dto_GearManufacturer extends EntityBase
+export default class dto_GearManufacturer extends EntityBase
 {
-    manufacturerId: number | null;
-    manufacturerName: string;
-    isActive: boolean;
-    primaryLocationId: number | null;
+    manufacturerId: number | null = 0;
+    manufacturerName: string = '';
+    isActive: boolean = true;
+    primaryLocationId: number | null = 0;
+    updatedBy: string = '';
 }

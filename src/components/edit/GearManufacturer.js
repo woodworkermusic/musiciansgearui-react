@@ -3,20 +3,16 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useState } from 'react';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 
-function GearManufacturer() {
-    const [manufacturerName, setManufacturerName] = useState('dummyname');
-    const [isActive, setIsActive] = useState(false);
-
-    const changeName = (inputText) => {
-        setManufacturerName(inputText);
-    }
-
-    const changeActive = (activeValue) => {
-        setIsActive(activeValue);
-    }
+function GearManufacturer({data}) {
+    const [manufacturerName, setManufacturerName] = useState(data.manufacturerName);
+    const [isActive, setIsActive] = useState(data.active);
 
     function addManufacturer() {
-        GearManufacturerService.addManufacturer(manufacturerName, isActive, '1');
+        GearManufacturerService.add(manufacturerName, isActive, '1');
+    }
+
+    function update() {
+        GearManufacturerService.update(manufacturerName, isActive, '1');
     }
 
     return (
@@ -24,11 +20,19 @@ function GearManufacturer() {
             <tbody>
             <tr>
                 <td>Manufacturer Name:</td>
-                <td><input type="text" className={mgcStyles.softInput} size="40" maxlength="60" onChange={changeName} /></td>
+                <td><input className={mgcStyles.softInput} size="40" maxLength="60" onChange={e => setManufacturerName(e.target.value)} value={manufacturerName} /></td>
                 <td>Active?</td>
-                <td><input type="checkbox" onChange={changeActive}/></td>
-                <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addManufacturer}>Add</button></td>
-                <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnMaroon}`}>Remove</button></td>
+                <td><input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>
+                {
+                    (data.manufacturerId > 0) ?
+                        <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={update}>Update</button></td>
+                        : null
+                }
+                {
+                    (data.manufacturerId === 0) ?
+                        <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addManufacturer}>Add</button></td>
+                        : null
+                }
             </tr>
             </tbody>
         </table>

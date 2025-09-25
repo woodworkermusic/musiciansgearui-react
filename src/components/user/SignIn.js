@@ -10,14 +10,6 @@ function SignIn({ closeSignInClick }) {
     const [loginId, setLoginId] = useState('DonQuixote');
     const [loginPwd, setLoginPwd] = useState('@v3ryl0ngPa$$w0rd');
 
-    const changeLoginId = (inputText) => {
-        setLoginId(inputText);
-    }
-
-    const changeLoginPwd = (inputText) => {
-        setLoginPwd(inputText);
-    }
-
     function signIn() 
     {
         var loginData = {
@@ -47,13 +39,13 @@ function SignIn({ closeSignInClick }) {
 
             <div className={mgcStyles.marginTop}>
                 <div className={mgcStyles.marginTop}>
-                    <input type="text" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        id="txtLoginId" size="25" maxLength="100" onChange={changeLoginId} value={loginId}/>
+                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                        id="txtLoginId" size="25" maxLength="100" onChange={e => setLoginId(e.target.value)} value={loginId}/>
                 </div>
                 <div className={mgcStyles.marginTop}>LOGIN ID</div>
                 <div className={mgcStyles.marginTop}>
                      <input type="password" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        id="txtPassword" size="25" maxLength="100" onChange={changeLoginPwd} value={loginPwd}/>
+                        id="txtPassword" size="25" maxLength="100" onChange={e => setLoginPwd(e.target.value)} value={loginPwd}/>
                 </div>
                 <div className={mgcStyles.marginTop}>PASSWORD</div>
 

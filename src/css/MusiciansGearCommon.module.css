@@ -243,6 +243,7 @@ body {
     background-color:ivory;
     color:black;
     border:1px solid black;
+    border-radius: 4px;
     overflow:auto;
     min-height:240px;
     min-width:180px;
@@ -256,14 +257,18 @@ body {
     text-decoration:none;
     outline:none;
     display:block;
-    font-size:9pt;
+    font-size:11pt;
     color:black;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 3px;
     background-color:transparent;
 }
 
     .selectListLink:hover {
         background-color:black;
         color:ivory;
+        cursor: pointer;
     }
 
 .ctrlStandardEdit {
@@ -374,6 +379,10 @@ body {
 .marginTopBottom {
     margin-top:5px;
     margin-bottom:5px;
+}
+
+.marginRight {
+    margin-right: 5px;
 }
 
 .stdDisplayTable td {
