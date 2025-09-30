@@ -3,16 +3,18 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useState } from 'react';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 
-function GearManufacturer({data}) {
+function GearManufacturer({data, refreshData}) {
     const [manufacturerName, setManufacturerName] = useState(data.manufacturerName);
-    const [isActive, setIsActive] = useState(data.active);
+    const [isActive, setIsActive] = useState(data.isActive);
 
     function addManufacturer() {
         GearManufacturerService.add(manufacturerName, isActive, '1');
+        refreshData();
     }
 
     function update() {
         GearManufacturerService.update(manufacturerName, isActive, '1');
+        refreshData();
     }
 
     return (

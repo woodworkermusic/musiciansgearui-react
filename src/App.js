@@ -1,5 +1,5 @@
 import React from 'react';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   BrowserRouter,
@@ -19,7 +19,6 @@ import SignIn from './components/user/SignIn.js';
 import GearModel from './components/edit/GearModel.js';
 import GearType from './components/edit/GearType.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
-import GearManufacturerService from './services/gearmanufacturerservice.ts';
 
 const modalStyle = {
   content: {
@@ -36,14 +35,6 @@ const modalStyle = {
 function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
-
-  const [manufacturersData, setManufacturersData] = useState([]);
-
-  const fetchData = ()=> {
-      toggleMenu();
-      GearManufacturerService.getMany()
-        .then((response) => { setManufacturersData(response) });
-  }
 
   function displaySignIn() {
     setShowMenu(false);
@@ -86,7 +77,7 @@ function App() {
                 <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={fetchData}>Gear Manufacturers</Link>
+                <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
               </nav>
@@ -108,7 +99,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/about" element={<About />} />
-        <Route path="/gearmanufacturers" element={<GearManufacturers data={manufacturersData} />} />
+        <Route path="/gearmanufacturers" element={<GearManufacturers />} />
         <Route path="/gearmodels" element={<GearModel />} />
         <Route path="/geartypes" element={<GearType />} />
       </Routes>

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const ApiService = {
     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
-        console.log(new Date().toLocaleString() + ' : ' + postUrl);
 
         return axios({
           method: 'post',
@@ -17,6 +16,7 @@ const ApiService = {
           return response.data;
         })
         .catch(e => {
+          console.log(new Date().toLocaleString() + ' : ' + postUrl);
           console.log('ERROR:  post');
           console.log(e.message);
           return null;
@@ -24,14 +24,13 @@ const ApiService = {
     },
         
     sendGet: async<T>(getUrl: string): Promise<T> => {
-      console.log(new Date().toLocaleString() + ' : ' + getUrl);
-          
         return axios.get<any>(getUrl) 
           .then(response => {
             return response.data;
           })
           .catch(e => {
             // Handle the error
+            console.log(new Date().toLocaleString() + ' : ' + getUrl);
             console.log('ERROR:  get');
             console.log(e.message);
             return null;

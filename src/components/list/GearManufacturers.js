@@ -1,46 +1,53 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearManufacturer from '../edit/GearManufacturer.js';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 import dto_GearManufacturer from '../../models/dto_gearmanufacturer.ts';
 
-function GearManufacturers({data}) {
+function GearManufacturers() {
+    const [listData, setListData] = useState([]);
     const [showEdit, setShowEdit] = useState(false);
-    const [manufacturerData, setManufacturerData] = useState();
+    const [refreshData, setRefreshData] = useState(0);
+    const [mfrData, setData] = useState();
 
     const selectManufacturer = useCallback((id) => {
-        // Load the manufacturer here; then show the control.
-        GearManufacturerService.get(id)
-            .then((response) => { 
-                setManufacturerData(response);
-                setShowEdit(true);
-            });
+        if (id === 0) {
+            var dto = new dto_GearManufacturer();
+            dto.manufacturerName = 'new';
+            dto.isActive = true;
+
+            setData(dto);
+            setShowEdit(true);
+        }
+        else if (id > 0)
+        {
+            GearManufacturerService.get(id)
+                .then(response => {
+                    setData(response);
+                    setShowEdit(true);
+                })
+        }
     }, []);
 
-    const initNew = useCallback(() => {
-        var dto = new dto_GearManufacturer();
-        dto.manufacturerName = 'new manufacturer';
-        dto.isActive = true;
-
-        setManufacturerData(dto);
-        setShowEdit(true);
-    }, []);
-
-    const mappedData = data.map(listItem => (
+    const mappedData = listData.map(listItem => (
         <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>{listItem.value.manufacturerName}</div>
     ));
+
+    useEffect(()=> {
+        GearManufacturerService.getMany().then(response => setListData(response));
+    }, [refreshData]);
 
     return (
         <>
             <div className={mgcStyles.pageContent}>
                 <span className={mgcStyles.marginRight}>GEAR MANUFACTURERS:</span>
-                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={()=> initNew()}>New</button>
+                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={()=> selectManufacturer(0)}>New</button>
                 <div className={mgcStyles.ctrlCategorizedList}>{ mappedData }</div>
             </div>
 
             { 
                 showEdit ? 
-                <GearManufacturer data={manufacturerData} />
+                <GearManufacturer data={mfrData} refreshData={()=> setRefreshData(refreshData + 1)} />
                 : null
             }
         </>
