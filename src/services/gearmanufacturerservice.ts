@@ -12,7 +12,7 @@ const GearManufacturerService = {
         var newManufacturer = new dto_GearManufacturer();
 
         newManufacturer.updatedBy = updatedBy;
-        newManufacturer.isActive = isActive;
+        newManufacturer.active = isActive;
         newManufacturer.manufacturerName = manufacturerName;
 
         ApiService.sendPost(serviceApiUrl, newManufacturer);
@@ -39,7 +39,7 @@ const GearManufacturerService = {
         var search = {
             startsWith: '',
             pageNumber: 1,
-            pageSize: 10,
+            pageSize: 100,
             includeDeleted: false
         };
 

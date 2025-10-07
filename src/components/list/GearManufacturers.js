@@ -7,7 +7,6 @@ import dto_GearManufacturer from '../../models/dto_gearmanufacturer.ts';
 function GearManufacturers() {
     const [listData, setListData] = useState([]);
     const [showEdit, setShowEdit] = useState(false);
-    const [refreshData, setRefreshData] = useState(0);
     const [mfrData, setData] = useState();
 
     const selectManufacturer = useCallback((id) => {
@@ -34,13 +33,12 @@ function GearManufacturers() {
     ));
 
     const triggerRefresh = useCallback(() => {
-        console.log('triggered refresh');
-        setRefreshData(refreshData + 1);
-    }, [refreshData]);
+        GearManufacturerService.getMany().then(response => setListData(response));
+    }, []);
 
     useEffect(()=> {
         GearManufacturerService.getMany().then(response => setListData(response));
-    }, [refreshData]);
+    }, []);
 
     return (
         <>
