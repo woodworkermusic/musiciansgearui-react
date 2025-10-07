@@ -245,6 +245,7 @@ body {
     border:1px solid black;
     border-radius: 4px;
     overflow:auto;
+    height: 40px;
     min-height:240px;
     min-width:180px;
     max-width:240px;

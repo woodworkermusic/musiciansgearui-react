@@ -14,7 +14,7 @@ function GearManufacturers() {
         if (id === 0) {
             var dto = new dto_GearManufacturer();
             dto.manufacturerName = 'new';
-            dto.isActive = true;
+            dto.active = true;
 
             setData(dto);
             setShowEdit(true);
@@ -33,6 +33,11 @@ function GearManufacturers() {
         <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>{listItem.value.manufacturerName}</div>
     ));
 
+    const triggerRefresh = useCallback(() => {
+        console.log('triggered refresh');
+        setRefreshData(refreshData + 1);
+    }, [refreshData]);
+
     useEffect(()=> {
         GearManufacturerService.getMany().then(response => setListData(response));
     }, [refreshData]);
@@ -47,7 +52,7 @@ function GearManufacturers() {
 
             { 
                 showEdit ? 
-                <GearManufacturer data={mfrData} refreshData={()=> setRefreshData(refreshData + 1)} />
+                <GearManufacturer data={mfrData} refreshData={()=> triggerRefresh()} />
                 : null
             }
         </>
