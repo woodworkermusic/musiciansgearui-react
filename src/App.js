@@ -17,7 +17,7 @@ import Home from './home.js';
 import About from './components/About.js';
 import SignIn from './components/user/SignIn.js';
 import GearModel from './components/edit/GearModel.js';
-import GearType from './components/edit/GearType.js';
+import GearTypes from './components/list/GearTypes.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
 
 const modalStyle = {
@@ -101,7 +101,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/gearmanufacturers" element={<GearManufacturers />} />
         <Route path="/gearmodels" element={<GearModel />} />
-        <Route path="/geartypes" element={<GearType />} />
+        <Route path="/geartypes" element={<GearTypes />} />
       </Routes>
     </BrowserRouter>
   );

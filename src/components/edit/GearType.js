@@ -1,27 +1,38 @@
-function GearType() {
+import mgcStyles from '../../css/MusiciansGearCommon.module.css';
+import { useEffect, useState } from 'react';
+import GearTypeService from '../../services/geartypeservice.ts';
+
+function GearType({data, refreshData}) {
+    const [gearTypeName, setName] = useState();
+    const [isActive, setIsActive] = useState();
+
+    function addUpdate() {
+        if (data.gearTypeId === 0) {
+            GearTypeService.add(gearTypeName, isActive, '1');
+        }
+        else if (data.gearTypeId > 0) {
+            GearTypeService.update(gearTypeName, isActive, '1');
+        }
+        refreshData();
+    }
+    
+    useEffect(()=> {
+        setName(data.gearTypeName);
+        setIsActive(data.active);
+    }, [data]);
+
     return (
-        <div className="ctrlGearType">
-            <table className="stdDisplayTable">
-                <tr>
-                    <td>Gear Type:</td>
-                    <td><input type="text" className="softInput gearType_Name" size="40" maxlength="60" /></td>
-                    <td>Active?</td>
-                    <td><input type="checkbox" className="gearType_Active" /></td>
-                    <td><a href="#" className="anchorBtn anchorBtnGreen addUpdate_GearType"></a></td>
-                    <td><a href="#" className="anchorBtn anchorBtnMaroon remove_GearType"></a></td>
-                </tr>
-            </table>
-
-            <hr />
-
-            <div className="marginTopBottom innerCtrl_gearSubType">
-                Sub Types:
-                <span className="smallText gearType_subTypeCount" style="margin-left:5px;margin-right:5px;"></span>
-                <a href="#" className="anchorBtn anchorBtnGreen addSubType">Add New SubType</a>
-            </div>
-
-            <div className="marginTopBottom dataCtrl_gearSubTypes"></div>
-        </div>    
+        <table className={mgcStyles.stdDisplayTable}>
+            <tbody>
+            <tr>
+                <td>Manufacturer Name:</td>
+                <td><input className={mgcStyles.softInput} size="40" maxLength="60" onChange={e => setName(e.target.value)} value={gearTypeName} /></td>
+                <td>Active?</td>
+                <td><input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>
+                <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{data.gearTypeId === 0 ? 'Add' : 'Update'}</button></td>
+            </tr>
+            </tbody>
+        </table>
     );
 }
 
