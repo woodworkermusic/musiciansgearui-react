@@ -32,9 +32,10 @@ function GearTypes() {
         <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectGearType(listItem.value.gearTypeId)}>{listItem.value.gearTypeName}</div>
     ));
 
-    const triggerRefresh = useCallback(() => {
+    function triggerRefresh() {
+        console.log('refreshing list trois');
         GearTypeService.getMany().then(response => setListData(response));
-    }, []);
+    }
 
     useEffect(()=> {
         GearTypeService.getMany().then(response => setListData(response));
@@ -50,7 +51,7 @@ function GearTypes() {
 
             { 
                 showEdit ? 
-                <GearType data={gearTypeData} refreshData={()=> triggerRefresh()} />
+                <GearType data={gearTypeData} refreshData={triggerRefresh} />
                 : null
             }
         </>

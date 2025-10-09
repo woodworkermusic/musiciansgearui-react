@@ -5,17 +5,17 @@ import { GearType } from '../models/geartype.ts';
 const serviceApiUrl = 'https://localhost:44326/api/GearType';
 
 const GearTypeService = {
-    add: (typeName: string
+    add: async(typeName: string
         , isActive: boolean
         , updatedBy: string
-        )=> {
+        ): Promise<GearType> => {
         var newData = new dto_GearType();
 
         newData.updatedBy = updatedBy;
         newData.active = isActive;
         newData.gearTypeName = typeName;
 
-        ApiService.sendPost(serviceApiUrl, newData);
+        return ApiService.sendPost<GearType>(serviceApiUrl, newData);
     },
 
     update: (id: number

@@ -32,9 +32,9 @@ function GearManufacturers() {
         <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>{listItem.value.manufacturerName}</div>
     ));
 
-    const triggerRefresh = useCallback(() => {
+    function triggerRefresh() {
         GearManufacturerService.getMany().then(response => setListData(response));
-    }, []);
+    };
 
     useEffect(()=> {
         GearManufacturerService.getMany().then(response => setListData(response));

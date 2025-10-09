@@ -9,12 +9,11 @@ function GearManufacturer({data, refreshData}) {
 
     function addUpdate() {
         if (data.manufacturerId === 0) {
-            GearManufacturerService.add(manufacturerName, isActive, '1');
+            GearManufacturerService.add(manufacturerName, isActive, '1').then(()=> refreshData());
         }
         else if (data.manufacturerId > 0) {
-            GearManufacturerService.update(manufacturerName, isActive, '1');
+            GearManufacturerService.update(manufacturerName, isActive, '1').then(()=> refreshData());
         }
-        refreshData();
     }
     
     useEffect(()=> {

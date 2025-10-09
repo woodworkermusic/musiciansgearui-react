@@ -8,12 +8,11 @@ function GearType({data, refreshData}) {
 
     function addUpdate() {
         if (data.gearTypeId === 0) {
-            GearTypeService.add(gearTypeName, isActive, '1');
+            GearTypeService.add(gearTypeName, isActive, '1').then(()=> refreshData());
         }
         else if (data.gearTypeId > 0) {
-            GearTypeService.update(gearTypeName, isActive, '1');
+            GearTypeService.update(gearTypeName, isActive, '1').then(()=> refreshData());
         }
-        refreshData();
     }
     
     useEffect(()=> {

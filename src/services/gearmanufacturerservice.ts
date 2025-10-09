@@ -5,17 +5,17 @@ import { GearManufacturer } from '../models/gearmanufacturer.ts';
 const serviceApiUrl = 'https://localhost:44326/api/Manufacturer';
 
 const GearManufacturerService = {
-    add: (manufacturerName: string
+    add: async(manufacturerName: string
         , isActive: boolean
         , updatedBy: string
-        )=> {
+        ): Promise<GearManufacturer> => {
         var newManufacturer = new dto_GearManufacturer();
 
         newManufacturer.updatedBy = updatedBy;
         newManufacturer.active = isActive;
         newManufacturer.manufacturerName = manufacturerName;
 
-        ApiService.sendPost(serviceApiUrl, newManufacturer);
+        return ApiService.sendPost<GearManufacturer>(serviceApiUrl, newManufacturer);
     },
 
     update: (id: number
