@@ -1,19 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
-import GearManufacturer from '../edit/GearManufacturer.js';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
+import GearTypeService from '../../services/geartypeservice.ts';
 import GearTypesByManufacturer from './GearTypesByManufacturer.js';
 
 function GearModels() {
-    const [manufacturerList, setManufacturerList] = useState([]);
     const [listData, setListData] = useState([]);
-    const [showEdit, setShowEdit] = useState(false);
-    const [mfrData, setData] = useState();
+    const [showHideData, setShowHide] = useState([]);
 
-    const selectManufacturer = useCallback((id) => {
-        GearManufacturerService.get(id)
+    const showHideTypes = useCallback((id) => {
+        GearTypeService.getByManufacturer(id)
             .then(response => {
-                setData(response);
+
             });
     }, []);
 
@@ -21,19 +19,16 @@ function GearModels() {
     Structure:
         Where to locate add buttons?
         Manufacturer Name
-            - Gear Type 
+            - Gear Type  
                 - Gear Models
     */
     const mappedData = listData.map(listItem => (
         <div key={listItem.key}>
-            <div className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>
+            <div className={mgcStyles.selectListLink} onClick={()=> showHideTypes(listItem.value.manufacturerId)}>
                 <span className={mgcStyles.marginRight}>{listItem.value.manufacturerName}</span>
                 <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`}>Add</button>
             </div>
-            <div>geartypes</div>
-            <ul>
-                <GearTypesByManufacturer manufacturerId={listItem.value.manufacturerId} />
-            </ul>
+            <GearTypesByManufacturer manufacturerId={listItem.value.manufacturerId} />
         </div>
     ));
 

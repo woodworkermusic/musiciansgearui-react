@@ -6,7 +6,7 @@ function GearModelsByManufacturer({manufacturerId, gearTypeId}) {
     const [listData, setListData] = useState([]);
 
     const mappedData = listData.map(listItem => (
-        <li key={listItem.key}>{listItem.value.modelName}</li>
+        <li key={listItem.key} onClick={()=> alert(listItem.value.modelName)}>{listItem.value.modelName}</li>
     ));
 
     useEffect(()=> {
@@ -14,9 +14,9 @@ function GearModelsByManufacturer({manufacturerId, gearTypeId}) {
     }, [manufacturerId, gearTypeId]);
 
     return (
-        <>
+        <ul>
         {mappedData}
-        </>
+        </ul>
     );
 }
 

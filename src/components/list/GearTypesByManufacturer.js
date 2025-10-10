@@ -21,7 +21,9 @@ function GearTypesByManufacturer({manufacturerId}) {
 
     return (
         <>
-        {mappedData}
+        <ul>
+            {mappedData}
+        </ul>
         </>
     );
 }
