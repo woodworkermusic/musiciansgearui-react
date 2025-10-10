@@ -1,7 +1,7 @@
 import { EntityBase } from './entitybase.ts';
 
-export class GearModel extends EntityBase {
-    gearModelId: number;
+export default class dto_GearModel extends EntityBase {
+    gearModelId: number | null = 0;
     manufacturerId: number;
     gearTypeId: number;
     modelName: string;

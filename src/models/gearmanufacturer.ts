@@ -3,10 +3,8 @@ import { GearModel } from './gearmodel.ts';
 
 export class GearManufacturer extends EntityBase 
 {
-    ManufacturerId: number;
-    ManufacturerName: string;
-    Active: boolean;
-    PrimaryLocationId: number | null;
-
-    GearModels: GearModel[] | null;
+    manufacturerId: number;
+    manufacturerName: string;
+    primaryLocationId: number | null;
+    gearModels: GearModel[] | null;
 }

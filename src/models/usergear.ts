@@ -1,6 +1,6 @@
-import { EntityBase } from './entitybase';
-import { IncidentReport } from './incidentreport';
-import { GearImage } from './imageentities';
+import { EntityBase } from './entitybase.ts';
+import { IncidentReport } from './incidentreport.ts';
+import { GearImage } from './imageentities.ts';
 
 export class UserGear extends EntityBase 
 {

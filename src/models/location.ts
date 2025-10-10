@@ -1,4 +1,4 @@
-import { EntityBase } from './entitybase';
+import { EntityBase } from './entitybase.ts';
 
 export class Location extends EntityBase
 {

@@ -44,6 +44,10 @@ const GearTypeService = {
         };
 
         return ApiService.sendPost<GearType[]>(`${serviceApiUrl}/Search`, search);
+    },
+
+    getByManufacturer: async(id): Promise<GearType[]> => {
+        return ApiService.sendGet<GearType[]>(`${serviceApiUrl}/manufacturer/${id}`);
     }
 };
 

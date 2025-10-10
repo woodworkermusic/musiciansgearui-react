@@ -1,6 +1,6 @@
-import { EntityBase } from './entitybase';
-import { ClientContact } from './clientcontact';
-import { Location } from './location';
+import { EntityBase } from './entitybase.ts';
+import { ClientContact } from './clientcontact.ts';
+import { Location } from './location.ts';
 
 export class Client extends EntityBase 
 {

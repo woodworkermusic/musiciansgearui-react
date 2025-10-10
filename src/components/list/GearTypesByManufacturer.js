@@ -1,19 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
-import GearManufacturer from '../edit/GearManufacturer.js';
-import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
-import dto_GearManufacturer from '../../models/dto_gearmanufacturer.ts';
+import GearTypeService from '../../services/geartypeservice.ts';
+import GearModelsByManufacturer from './GearModelsByManufacturer.js';
 
 function GearTypesByManufacturer({manufacturerId}) {
     const [listData, setListData] = useState([]);
 
     const mappedData = listData.map(listItem => (
-        <ul key={listItem.key} className={mgcStyles.selectListLink}>{listItem.value.gearTypeName}</ul>
+        <li key={listItem.key}>
+            {listItem.value.gearTypeName}
+            <ul>
+                <GearModelsByManufacturer manufacturerId={manufacturerId} gearTypeId={listItem.value.gearTypeId} />
+            </ul>
+        </li>
     ));
 
     useEffect(()=> {
-        GearManufacturerService.getMany().then(response => setListData(response));
-    }, []);
+        GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
+    }, [manufacturerId]);
 
     return (
         <>

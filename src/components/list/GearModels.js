@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearManufacturer from '../edit/GearManufacturer.js';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
-import dto_GearManufacturer from '../../models/dto_gearmanufacturer.ts';
+import GearTypesByManufacturer from './GearTypesByManufacturer.js';
 
 function GearModels() {
     const [manufacturerList, setManufacturerList] = useState([]);
@@ -27,10 +27,13 @@ function GearModels() {
     const mappedData = listData.map(listItem => (
         <div key={listItem.key}>
             <div className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>
-                {listItem.value.manufacturerName}
+                <span className={mgcStyles.marginRight}>{listItem.value.manufacturerName}</span>
+                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`}>Add</button>
             </div>
-            <ul>geartypes</ul>
-            <ul>gearmodels</ul>
+            <div>geartypes</div>
+            <ul>
+                <GearTypesByManufacturer manufacturerId={listItem.value.manufacturerId} />
+            </ul>
         </div>
     ));
 

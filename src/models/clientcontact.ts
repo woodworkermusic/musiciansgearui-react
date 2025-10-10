@@ -1,4 +1,4 @@
-import { EntityBase } from './entitybase';
+import { EntityBase } from './entitybase.ts';
 
 export class ClientContact extends EntityBase {
     clientContactId: number;
@@ -7,5 +7,4 @@ export class ClientContact extends EntityBase {
     firstName: string;
     emailAddress: string;
     phoneNumber: string;
-    active: boolean;
 }

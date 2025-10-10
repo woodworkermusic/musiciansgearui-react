@@ -1,11 +1,7 @@
-import { EntityBase } from './entitybase';
-import { GearSubType } from './gearsubtype';
+import { EntityBase } from './entitybase.ts';
 
 export class GearType extends EntityBase 
 {
     gearTypeId: number;
-    isActive: boolean;
     gearTypeName: string;
-
-    gearSubTypes: GearSubType[] = [];
 }

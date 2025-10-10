@@ -1,6 +1,6 @@
-import { EntityBase } from './entitybase';
-import { Location } from './location';
-import { UserGear } from './usergear';
+import { EntityBase } from './entitybase.ts';
+import { Location } from './location.ts';
+import { UserGear } from './usergear.ts';
 
 export class UserProfile extends EntityBase 
 {
