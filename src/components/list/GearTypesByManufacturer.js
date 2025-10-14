@@ -3,7 +3,7 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelsByManufacturer from './GearModelsByManufacturer.js';
 
-function GearTypesByManufacturer({manufacturerId}) {
+function GearTypesByManufacturer({manufacturerId, displayValue}) {
     const [listData, setListData] = useState([]);
 
     const mappedData = listData.map(listItem => (
@@ -17,11 +17,12 @@ function GearTypesByManufacturer({manufacturerId}) {
 
     useEffect(()=> {
         GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
-    }, [manufacturerId]);
+        console.log('displayValue:  ' + displayValue);
+    }, [manufacturerId, displayValue]);
 
     return (
         <>
-        <ul>
+        <ul style={{display: displayValue}}>
             {mappedData}
         </ul>
         </>
