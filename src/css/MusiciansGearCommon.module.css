@@ -147,9 +147,6 @@ body {
     float:right;
 }
 
-.mainBody {
-}
-
 .pageContent {
     padding:5px 5px 5px 5px;
     color:ivory;
@@ -248,8 +245,8 @@ body {
     overflow:auto;
     height: 40px;
     min-height:240px;
-    min-width:180px;
-    max-width:240px;
+    min-width:360px;
+    max-width:640px;
     max-height:75vh;
     padding:4px 4px 4px 4px;
     margin-top:10px;
@@ -430,4 +427,31 @@ body {
 }
 
     .navigationLink:hover {
+    }
+
+.innerList {
+    list-style-type: none;
+    padding: 0px;
+    margin-left:25px;
+    margin-top:5px;
+}
+
+.innerListLink {
+    text-decoration:none;
+    outline:none;
+    display:block;
+    font-size:10pt;
+    color:black;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 3px;
+    background-color:transparent;
+    padding-left: 0px;
+    margin-left:0px;
+}
+
+    .innerListLink:hover {
+        background-color:black;
+        color:ivory;
+        cursor: pointer;
     }

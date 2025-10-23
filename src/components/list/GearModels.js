@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 import GearTypesByManufacturer from './GearTypesByManufacturer.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
 function GearModels() {
     const [listData, setListData] = useState([]);
@@ -22,28 +24,23 @@ function GearModels() {
         });
     };
 
-    const mappedData = listData.map(m => 
-        {
-            return (
-                <div key={m.key}>
-                    <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.value)}>
-                        <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
-                        <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`}>+</button>
-                    </div>
-                    <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} expanded={expanded[m.value.manufacturerId]} /> 
-                </div>
-            );
-        });
+    const mappedData = listData.map(m => (
+        <div key={m.key}>
+            <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.value)}>
+                <FontAwesomeIcon className={mgcStyles.marginRight} icon={expanded[m.value.manufacturerId] ? faAngleUp :faAngleDown} />
+                <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
+            </div>
+            <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} expanded={expanded[m.value.manufacturerId]} /> 
+        </div>
+    ));
 
     return (
-        <>
-            <div className={mgcStyles.pageContent}>
-                <span className={mgcStyles.marginRight}>GEAR MODELS:</span>
-                <div className={mgcStyles.ctrlCategorizedList}>
-                    { mappedData }
-                </div>
+        <div className={mgcStyles.pageContent}>
+            <span className={mgcStyles.marginRight}>GEAR MODELS:</span>
+            <div className={mgcStyles.ctrlCategorizedList}>
+                { mappedData }
             </div>
-        </>
+        </div>
     );
 }
 
