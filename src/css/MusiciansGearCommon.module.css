@@ -1,6 +1,7 @@
 body {
     font-family:'Lato', sans-serif;
-    background-color:#482400;
+    /* background-color:#482400; */
+    background-image: url("../AcousticBackground.jpg");
     margin:0 0 0 0;
     padding:0 0 0 0;
     font-size: 10pt;

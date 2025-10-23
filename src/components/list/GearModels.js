@@ -5,7 +5,7 @@ import GearTypesByManufacturer from './GearTypesByManufacturer.js';
 
 function GearModels() {
     const [listData, setListData] = useState([]);
-      
+    
     useEffect(()=> {
         GearManufacturerService.getMany().then(response => {
             let newData = response.map((r) => { r.showGearTypes = false; return r; });
@@ -13,34 +13,34 @@ function GearModels() {
         });
     }, []);
 
+    const [expanded, setExpanded] = useState({});
+
+    const toggleExpanded = (childItem)=> {
+        setExpanded({
+            ...expanded,
+            [childItem.manufacturerId] : !expanded[childItem.manufacturerId]
+        });
+    };
+
+    const mappedData = listData.map(m => 
+        {
+            return (
+                <div key={m.key}>
+                    <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.value)}>
+                        <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
+                        <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`}>+</button>
+                    </div>
+                    <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} expanded={expanded[m.value.manufacturerId]} /> 
+                </div>
+            );
+        });
+
     return (
         <>
             <div className={mgcStyles.pageContent}>
                 <span className={mgcStyles.marginRight}>GEAR MODELS:</span>
                 <div className={mgcStyles.ctrlCategorizedList}>
-                    { 
-                        listData.map(m => 
-                        {
-                            const toggleGearTypes = ()=> { 
-                                showGearTypes = !showGearTypes;
-                                currentDisplayValue = (showGearTypes ? '' : 'none');
-                                console.log('toggled; new value:  ' + currentDisplayValue);
-                            }
-                
-                            let showGearTypes = false;
-                            let currentDisplayValue = 'none';
-
-                            return (
-                                <div key={m.key}>
-                                    <div className={mgcStyles.selectListLink} onClick={()=> toggleGearTypes()}>
-                                        <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
-                                        <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`}>+</button>
-                                    </div>
-                                    <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} displayValue={currentDisplayValue} /> 
-                                </div>
-                            );
-                        }
-                    )}
+                    { mappedData }
                 </div>
             </div>
         </>

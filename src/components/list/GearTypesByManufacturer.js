@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import mgcStyles from '../../css/MusiciansGearCommon.module.css';
+// import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelsByManufacturer from './GearModelsByManufacturer.js';
 
-function GearTypesByManufacturer({manufacturerId, displayValue}) {
+function GearTypesByManufacturer({manufacturerId, expanded}) {
     const [listData, setListData] = useState([]);
 
     const mappedData = listData.map(listItem => (
@@ -17,12 +17,11 @@ function GearTypesByManufacturer({manufacturerId, displayValue}) {
 
     useEffect(()=> {
         GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
-        console.log('displayValue:  ' + displayValue);
-    }, [manufacturerId, displayValue]);
+    }, [manufacturerId]);
 
     return (
         <>
-        <ul style={{display: displayValue}}>
+        <ul style={{display: (expanded ? '' : 'none')}}>
             {mappedData}
         </ul>
         </>

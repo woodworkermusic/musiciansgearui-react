@@ -2,7 +2,7 @@ import ApiService from './apiservice.ts';
 import dto_GearType from '../models/dto_geartype.ts';
 import { GearType } from '../models/geartype.ts';
 
-const serviceApiUrl = 'https://localhost:44326/api/GearType';
+const svcUrlExtension = 'GearType';
 
 const GearTypeService = {
     add: async(typeName: string
@@ -15,7 +15,7 @@ const GearTypeService = {
         newData.active = isActive;
         newData.gearTypeName = typeName;
 
-        return ApiService.sendPost<GearType>(serviceApiUrl, newData);
+        return ApiService.sendPost<GearType>(svcUrlExtension, newData);
     },
 
     update: (id: number
@@ -43,11 +43,11 @@ const GearTypeService = {
             includeDeleted: false
         };
 
-        return ApiService.sendPost<GearType[]>(`${serviceApiUrl}/Search`, search);
+        return ApiService.sendPost<GearType[]>(`${svcUrlExtension}/Search`, search);
     },
 
     getByManufacturer: async(id): Promise<GearType[]> => {
-        return ApiService.sendGet<GearType[]>(`${serviceApiUrl}/manufacturer/${id}`);
+        return ApiService.sendGet<GearType[]>(`${svcUrlExtension}/manufacturer/${id}`);
     }
 };
 

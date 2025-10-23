@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const serviceApiBase = 'https://localhost:44326/api/';
+
 const ApiService = {
     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
 
@@ -9,7 +11,7 @@ const ApiService = {
               'Content-Type': 'application/json'
               , 'Access-Control-Allow-Origin': '*'
               },
-          url: postUrl,
+          url: `${serviceApiBase}${postUrl}`,
           data: postData
         })
         .then(response => {
@@ -24,7 +26,7 @@ const ApiService = {
     },
         
     sendGet: async<T>(getUrl: string): Promise<T> => {
-        return axios.get<any>(getUrl) 
+        return axios.get<any>(`${serviceApiBase}${getUrl}`) 
           .then(response => {
             return response.data;
           })
