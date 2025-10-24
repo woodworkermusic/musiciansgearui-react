@@ -11,6 +11,7 @@ function GearModelsByManufacturer({manufacturerId, gearTypeId, expanded}) {
 
     const selectModel = (e)=> {
         e.stopPropagation();
+        // load the model but we want it in a different edit area
     }
 
     return (

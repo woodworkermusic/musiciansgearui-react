@@ -245,7 +245,7 @@ body {
     overflow:auto;
     height: 40px;
     min-height:240px;
-    min-width:360px;
+    min-width:240px;
     max-width:640px;
     max-height:75vh;
     padding:4px 4px 4px 4px;

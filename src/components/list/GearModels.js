@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 import GearTypesByManufacturer from './GearTypesByManufacturer.js';
+import GearModel from '../edit/GearModel.js';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
@@ -35,12 +37,22 @@ function GearModels() {
     ));
 
     return (
-        <div className={mgcStyles.pageContent}>
-            <span className={mgcStyles.marginRight}>GEAR MODELS:</span>
-            <div className={mgcStyles.ctrlCategorizedList}>
-                { mappedData }
+        <>
+            <div className={mgcStyles.marginDblTop}>
+                <div className={mgcStyles.leftContent}>
+                    <span className={mgcStyles.pageContent}>GEAR MODELS:</span>
+                    <div className={mgcStyles.ctrlCategorizedList}>
+                        { mappedData }
+                    </div>
+                </div>
+                <div className={mgcStyles.leftContent}>
+                    <GearModel />
+                </div>
             </div>
-        </div>
+
+
+            <br className={mgcStyles.clearBreak} />
+        </>
     );
 }
 
