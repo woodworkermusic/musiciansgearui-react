@@ -2,6 +2,7 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useEffect, useState } from 'react';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelService from '../../services/gearmodelservice.ts';
+import UploadImage from './UploadImage.js';
 
 function GearModel({gearModelId, refreshData}) {
     const [modelData, setModelData] = useState();
@@ -52,6 +53,7 @@ function GearModel({gearModelId, refreshData}) {
                 Sample Images:
                 <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`}>Add</button>
             </div>
+            <UploadImage imageType={'gearmodel'} />
         </>
     );
 }
