@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearModelService from '../../services/gearmodelservice.ts';
 
-function GearModelsByManufacturer({manufacturerId, gearTypeId, expanded}) {
+function GearModelsByManufacturer({manufacturerId, gearTypeId, expanded, cbModelClicked}) {
     const [listData, setListData] = useState([]);
 
     useEffect(()=> {
-        GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));
-    }, [manufacturerId, gearTypeId]);
+        if (expanded) {
+            GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));
+        }
+    }, [manufacturerId, gearTypeId, expanded]);
 
     const selectModel = (e)=> {
+        cbModelClicked(e.target.id);
         e.stopPropagation();
-        // load the model but we want it in a different edit area
     }
 
     return (

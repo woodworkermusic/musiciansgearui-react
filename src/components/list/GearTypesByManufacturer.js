@@ -5,7 +5,7 @@ import GearModelsByManufacturer from './GearModelsByManufacturer.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
-function GearTypesByManufacturer({manufacturerId, expanded}) {
+function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel}) {
     const [listData, setListData] = useState([]);
     const [expandModels, setExpanded] = useState({});
 
@@ -22,13 +22,15 @@ function GearTypesByManufacturer({manufacturerId, expanded}) {
                 <FontAwesomeIcon className={mgcStyles.marginRight} icon={expandModels[m.value.gearTypeId] ? faAngleUp :faAngleDown} />
                 {m.value.gearTypeName}
             </span>
-            <GearModelsByManufacturer manufacturerId={manufacturerId} gearTypeId={m.value.gearTypeId} expanded={expandModels[m.value.gearTypeId]}/>
+            <GearModelsByManufacturer manufacturerId={manufacturerId} gearTypeId={m.value.gearTypeId} expanded={expandModels[m.value.gearTypeId]} cbModelClicked={cbInitGearModel} />
         </li>
     ));
 
     useEffect(()=> {
-        GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
-    }, [manufacturerId]);
+        if (expanded) {
+            GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
+        }
+    }, [expanded, manufacturerId]);
 
     return (
         <ul style={{display: (expanded ? '' : 'none')}} className={mgcStyles.innerList}>

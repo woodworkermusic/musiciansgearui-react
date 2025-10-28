@@ -9,15 +9,16 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
 function GearModels() {
     const [listData, setListData] = useState([]);
-    
+    const [showGearModel, setShowGearModel] = useState(false);
+    const [selectedModelId, setModelId] = useState();
+    const [expanded, setExpanded] = useState({});
+
     useEffect(()=> {
         GearManufacturerService.getMany().then(response => {
             let newData = response.map((r) => { r.showGearTypes = false; return r; });
             setListData(newData);
         });
-    }, []);
-
-    const [expanded, setExpanded] = useState({});
+    }, [selectedModelId]);
 
     const toggleExpanded = (childItem)=> {
         setExpanded({
@@ -26,27 +27,34 @@ function GearModels() {
         });
     };
 
+    const selectGearModel = (gearModelId)=> {
+        setModelId(gearModelId);
+        setShowGearModel(true);
+    }
+
     const mappedData = listData.map(m => (
         <div key={m.key}>
             <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.value)}>
                 <FontAwesomeIcon className={mgcStyles.marginRight} icon={expanded[m.value.manufacturerId] ? faAngleUp :faAngleDown} />
                 <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
             </div>
-            <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} expanded={expanded[m.value.manufacturerId]} /> 
+            <GearTypesByManufacturer manufacturerId={m.value.manufacturerId} expanded={expanded[m.value.manufacturerId]} cbInitGearModel={selectGearModel} /> 
         </div>
     ));
 
     return (
         <>
             <div className={mgcStyles.marginDblTop}>
-                <div className={mgcStyles.leftContent}>
-                    <span className={mgcStyles.pageContent}>GEAR MODELS:</span>
-                    <div className={mgcStyles.ctrlCategorizedList}>
+                <span className={mgcStyles.pageContent}>GEAR MODELS:</span>
+                <div className={mgcStyles.marginTop}>
+                    <div className={`${mgcStyles.leftContent} ${mgcStyles.ctrlCategorizedList} ${mgcStyles.marginRight}`}>
                         { mappedData }
                     </div>
-                </div>
-                <div className={mgcStyles.leftContent}>
-                    <GearModel />
+                    <div className={mgcStyles.leftContent}>
+                        <div style={{display: showGearModel ? '' : 'none'}}>
+                            { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} /> : null }
+                        </div>
+                    </div>
                 </div>
             </div>
 

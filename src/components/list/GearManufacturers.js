@@ -37,6 +37,7 @@ function GearManufacturers() {
     };
 
     useEffect(()=> {
+        console.log('loading data');
         GearManufacturerService.getMany().then(response => setListData(response));
     }, []);
 

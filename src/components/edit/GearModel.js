@@ -9,6 +9,9 @@ function GearModel({gearModelId, refreshData}) {
     const [dataId, setDataId] = useState();
     const [modelName, setModelName] = useState();
     const [isActive, setIsActive] = useState();
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+
     const [buttonText, setButtonText] = useState();
 
     function addUpdate() {
@@ -25,33 +28,43 @@ function GearModel({gearModelId, refreshData}) {
         }
     }
     useEffect(()=> {
-        GearModelService.get(gearModelId).then(response => setModelData(response));
-        setButtonText('Update');
+        if (gearModelId !== undefined) {
+            GearModelService.get(gearModelId).then(response => {
+                setModelData(response);
+                setModelName(response.modelName);
+                setIsActive(response.active);
+                setStartDate(response.startDate);
+                setEndDate(response.endDate !== null ? response.endDate : '1/1/2026');
+            });
+            setButtonText('Update');
+        }
     });
 
     return (
         <>
             <table className={mgcStyles.stdDisplayTable}>
-                <tr>
-                    <td>Model Name:</td>
-                    <td colspan="3"><input className={mgcStyles.softInput} size="40" maxLength="60" onChange={e => setModelName(e.target.value)} value={modelName} /></td>
-                    {/* <td className="smallText titleEquipType">(not set)<a href="#" className="anchorBtn anchorBtnSteel lookupGearType">?</a></td> */}
-                </tr>
-                <tr>
-                    <td>Starting Date:</td>
-                    <td><input type="date" className={mgcStyles.softInput} size="10" maxlength="10" /></td>
-                    <td>Ending Date:</td>
-                    <td><input type="date" className={mgcStyles.softInput} size="10" maxlength="10" /></td>
-                </tr>
-                <tr>
-                    <td>Active?</td>
-                    <td><input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>
-                    <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>Model Name:</td>
+                        <td colSpan="3"><input className={mgcStyles.softInput} size="40" maxLength="60" onChange={e => setModelName(e.target.value)} value={modelName} /></td>
+                        {/* <td className="smallText titleEquipType">(not set)<a href="#" className="anchorBtn anchorBtnSteel lookupGearType">?</a></td> */}
+                    </tr>
+                    <tr>
+                        <td>Starting Date:</td>
+                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={startDate} /></td>
+                        <td>Ending Date:</td>
+                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={endDate} /></td>
+                    </tr>
+                    <tr>
+                        <td>Active?</td>
+                        <td><input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>
+                        <td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></td>
+                    </tr>
+                </tbody>
             </table>
             <div className={`${mgcStyles.marginTopBottom} ${mgcStyles.pageContent}`}>
                 Sample Images:
-                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`}>Add</button>
+                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`}>+</button>
             </div>
             <UploadImage imageType={'gearmodel'} />
         </>
