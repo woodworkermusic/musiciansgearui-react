@@ -2,6 +2,7 @@ import { useState } from "react";
 import ApiService from '../../services/apiservice.ts';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { dto_GearModelImage, dto_GearTypeImage, dto_UserGearImage } from "../../models/dto_imageupload.ts";
+import ImageService from '../../services/imageservice.ts';
 
 function UploadImage({imageType}) {
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -15,14 +16,8 @@ function UploadImage({imageType}) {
 		fileReader.addEventListener('load', ()=> {
 			let dataResult = fileReader.result;
 
-			const base64 = dataResult.split(',')[1];
-			const binaryString = atob(base64);
-			// const byteArray = new Uint8Array(binaryString.length);
-
-			// for (let i = 0; i < binaryString.length; i++)
-			// {
-			// 	byteArray[i] = binaryString.charCodeAt(i);
-			// }
+			let fileType = dataResult.split(',')[0];
+			let dataString = dataResult.split(',')[1];
 
 			switch (imageType) {
 				case "gearmodel":
@@ -30,8 +25,9 @@ function UploadImage({imageType}) {
 						let newImage = new dto_GearModelImage();
 						newImage.CreatedBy = "system";
 						newImage.GearModelId = 1;
+						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
-						newImage.ImageData = binaryString;
+						newImage.ImageData = ImageService.encodeDataUrl(dataString);
 						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
 						break;
 					}
@@ -40,8 +36,9 @@ function UploadImage({imageType}) {
 						let newImage = new dto_GearTypeImage();
 						newImage.CreatedBy = "system";
 						newImage.GearTypeId = 1;
+						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
-						newImage.ImageData = binaryString;
+						newImage.ImageData = ImageService.encodeDataUrl(dataString);
 						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
 						break;
 					}
@@ -50,8 +47,9 @@ function UploadImage({imageType}) {
 						let newImage = new dto_UserGearImage();
 						newImage.CreatedBy = "system";
 						newImage.UserGearId = 1;
+						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
-						newImage.ImageData = binaryString;
+						newImage.ImageData = ImageService.encodeDataUrl(dataString);
 						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
 						break;
 					}
@@ -65,15 +63,17 @@ function UploadImage({imageType}) {
 		if (selectedFile) {
 			return (
                 <table className={mgcStyles.stdDisplayTable}>
-                    <tr>
-                        <td>File Name:  {selectedFile.name}</td>
-                    </tr>
-                    <tr>
-                        <td>File Type:  {selectedFile.type}</td>
-                    </tr>
-                    <tr>
-                        <td>Last Modified:  {selectedFile.lastModifiedDate.toDateString()}</td>
-                    </tr>
+					<tbody>
+						<tr>
+							<td>File Name:  {selectedFile.name}</td>
+						</tr>
+						<tr>
+							<td>File Type:  {selectedFile.type}</td>
+						</tr>
+						<tr>
+							<td>Last Modified:  {selectedFile.lastModifiedDate.toDateString()}</td>
+						</tr>
+					</tbody>
                 </table>
 			);
 		} else {

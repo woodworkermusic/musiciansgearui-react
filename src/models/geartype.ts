@@ -2,6 +2,6 @@ import { EntityBase } from './entitybase.ts';
 
 export class GearType extends EntityBase 
 {
-    gearTypeId: number;
-    gearTypeName: string;
+    gearTypeId: number = 0;
+    gearTypeName: string = '';
 }

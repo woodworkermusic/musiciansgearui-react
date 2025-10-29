@@ -30,7 +30,7 @@ const GearTypeService = {
     },
 
     get: (id: number)=> {
-        return ApiService.sendGet(`${serviceApiUrl}/${id}`);
+        return ApiService.sendGet(`${svcUrlExtension}/${id}`);
     },
 
     //     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
@@ -46,7 +46,7 @@ const GearTypeService = {
         return ApiService.sendPost<GearType[]>(`${svcUrlExtension}/Search`, search);
     },
 
-    getByManufacturer: async(id): Promise<GearType[]> => {
+    getByManufacturer: async(id: number): Promise<GearType[]> => {
         return ApiService.sendGet<GearType[]>(`${svcUrlExtension}/manufacturer/${id}`);
     }
 };

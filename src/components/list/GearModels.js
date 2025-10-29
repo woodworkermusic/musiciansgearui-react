@@ -18,7 +18,7 @@ function GearModels() {
             let newData = response.map((r) => { r.showGearTypes = false; return r; });
             setListData(newData);
         });
-    }, [selectedModelId]);
+    }, []);
 
     const toggleExpanded = (childItem)=> {
         setExpanded({
@@ -44,7 +44,7 @@ function GearModels() {
 
     return (
         <>
-            <div className={mgcStyles.marginDblTop}>
+            <div className={`${mgcStyles.marginLeft} ${mgcStyles.marginDblTop}`}>
                 <span className={mgcStyles.pageContent}>GEAR MODELS:</span>
                 <div className={mgcStyles.marginTop}>
                     <div className={`${mgcStyles.leftContent} ${mgcStyles.ctrlCategorizedList} ${mgcStyles.marginRight}`}>

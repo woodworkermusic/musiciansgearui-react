@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelService from '../../services/gearmodelservice.ts';
 import UploadImage from './UploadImage.js';
+import SampleImages from '../list/SampleImages.js'; 
 
-function GearModel({gearModelId, refreshData}) {
-    const [modelData, setModelData] = useState();
+function GearModel({gearModelId}) {
+    // const [modelData, setModelData] = useState();
     const [dataId, setDataId] = useState();
     const [modelName, setModelName] = useState();
     const [isActive, setIsActive] = useState();
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
+    const [imageIdValues, setImageIdValues] = useState([]);
 
     const [buttonText, setButtonText] = useState();
 
@@ -20,25 +22,25 @@ function GearModel({gearModelId, refreshData}) {
                 .then((result)=> {
                     setDataId(result.gearModelId);
                     setButtonText('Update');
-                    refreshData();
+                    // refreshData();
                 });
         }
         else if (dataId > 0) {
-            GearModelService.update(modelName, isActive, '1').then(()=> refreshData());
+            // GearModelService.update(modelName, isActive, '1').then(()=> refreshData());
         }
     }
     useEffect(()=> {
         if (gearModelId !== undefined) {
             GearModelService.get(gearModelId).then(response => {
-                setModelData(response);
                 setModelName(response.modelName);
                 setIsActive(response.active);
                 setStartDate(response.startDate);
                 setEndDate(response.endDate !== null ? response.endDate : '1/1/2026');
+                setImageIdValues(response.imageIdList);
             });
             setButtonText('Update');
         }
-    });
+    }, [gearModelId]);
 
     return (
         <>
@@ -65,6 +67,7 @@ function GearModel({gearModelId, refreshData}) {
             <div className={`${mgcStyles.marginTopBottom} ${mgcStyles.pageContent}`}>
                 Sample Images:
                 <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`}>+</button>
+                <SampleImages idValues={imageIdValues} imageType={'gearmodel'} />
             </div>
             <UploadImage imageType={'gearmodel'} />
         </>
