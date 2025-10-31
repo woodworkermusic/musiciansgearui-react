@@ -455,3 +455,11 @@ body {
         color:ivory;
         cursor: pointer;
     }
+
+.sampleImage {
+    display: block;
+    max-width:320px;
+    max-height:160px;
+    width: auto;
+    height: auto;
+}

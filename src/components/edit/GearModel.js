@@ -2,7 +2,6 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useEffect, useState } from 'react';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelService from '../../services/gearmodelservice.ts';
-import UploadImage from './UploadImage.js';
 import SampleImages from '../list/SampleImages.js'; 
 
 function GearModel({gearModelId}) {
@@ -31,6 +30,7 @@ function GearModel({gearModelId}) {
     }
     useEffect(()=> {
         if (gearModelId !== undefined) {
+            setDataId(gearModelId);
             GearModelService.get(gearModelId).then(response => {
                 setModelName(response.modelName);
                 setIsActive(response.active);
@@ -64,12 +64,7 @@ function GearModel({gearModelId}) {
                     </tr>
                 </tbody>
             </table>
-            <div className={`${mgcStyles.marginTopBottom} ${mgcStyles.pageContent}`}>
-                Sample Images:
-                <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`}>+</button>
-                <SampleImages idValues={imageIdValues} imageType={'gearmodel'} />
-            </div>
-            <UploadImage imageType={'gearmodel'} />
+            <SampleImages parentId={dataId} idValues={imageIdValues} imageType={'gearmodel'} />
         </>
     );
 }

@@ -1,6 +1,7 @@
-export abstract class ImageUploadBase
+class ImageUploadBase
 {
     ImageFile: string = '';
+    ImageType: string = '';
     ImageData: string = '';
     CreatedBy: string = '';
 }
