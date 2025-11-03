@@ -5,26 +5,12 @@ import { GearModel } from '../models/gearmodel.ts';
 const svcUrlExtension = 'GearModel';
 
 const GearModelService = {
-    add: async(modelName: string
-        , isActive: boolean
-        , gearTypeId: number
-        , manufacturerId: number
-        , updatedBy: string
+    add: async(newModel: dto_GearModel
         ): Promise<GearModel> => {
-        var newData = new dto_GearModel();
-
-        newData.updatedBy = updatedBy;
-        newData.active = isActive;
-        newData.modelName = modelName;
-        newData.manufacturerId = manufacturerId;
-        newData.gearTypeId = gearTypeId;
-
-        return ApiService.sendPost<GearModel>(svcUrlExtension, newData);
+        return ApiService.sendPost<GearModel>(svcUrlExtension, newModel);
     },
 
-    update: (id: number
-        , isActive: boolean
-        , updatedBy: string
+    update: (gearModel: dto_GearModel
     )=> {
 
     },

@@ -10,18 +10,17 @@ function SampleImages({parentId, idValues, imageType}) {
 
     const refreshImages = useCallback(() => {
         let imgArray = [];
+		let promises = [];
 
-        for (var i = 0; i < idValues.length; i++)
-        {
-            ImageService.get(idValues[i], imageType)
-                .then((response) => {
-                    imgArray.push(response);
+		for (var i = 0; i < idValues.length; i++)
+		{
+			promises.push(ImageService.get(idValues[i], imageType)
+                .then((response) => imgArray.push(response))
+			);
+		}
 
-                    if (i === (idValues.length)) {
-                        setListData(imgArray);
-                    }
-                });
-         }
+		Promise.allSettled(promises)
+			.then(setListData(imgArray));
     }, [idValues, imageType]);
 
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -77,6 +76,7 @@ function SampleImages({parentId, idValues, imageType}) {
 						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
 						break;
 					}
+				default: break;
 			}
 		});
 
@@ -122,7 +122,7 @@ function SampleImages({parentId, idValues, imageType}) {
     useEffect(()=> {
         // load up the images.  idValues are a list of image id values from the *parent*, such as a GearModel.
         refreshImages();
-    });
+    }, [parentId, idValues, imageType, refreshImages]);
 
     return (
         <>

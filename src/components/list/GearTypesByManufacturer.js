@@ -26,6 +26,11 @@ function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel}) {
         </li>
     ));
 
+    const initNewModel = (e)=> {
+        cbInitGearModel(0, manufacturerId);
+        e.stopPropagation();
+    }
+
     useEffect(()=> {
         if (expanded) {
             GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
@@ -34,7 +39,7 @@ function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel}) {
 
     return (
         <ul style={{display: (expanded ? '' : 'none')}} className={mgcStyles.innerList}>
-            <li className={mgcStyles.innerListLink}>(add new model)</li>
+            <li className={mgcStyles.innerListLink} onClick={initNewModel}>(add new model)</li>
             {mappedData}
         </ul>
     );

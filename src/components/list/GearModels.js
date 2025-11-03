@@ -11,6 +11,7 @@ function GearModels() {
     const [listData, setListData] = useState([]);
     const [showGearModel, setShowGearModel] = useState(false);
     const [selectedModelId, setModelId] = useState();
+    const [manufacturerId, setManufacturerId] = useState();
     const [expanded, setExpanded] = useState({});
 
     useEffect(()=> {
@@ -27,8 +28,14 @@ function GearModels() {
         });
     };
 
-    const selectGearModel = (gearModelId)=> {
+    const selectGearModel = (gearModelId, manufacturerId)=> {
+        setManufacturerId(manufacturerId);
         setModelId(gearModelId);
+
+        if (showGearModel) {
+            // force it closed first?
+            setShowGearModel(false);
+        }
         setShowGearModel(true);
     }
 
@@ -52,7 +59,7 @@ function GearModels() {
                     </div>
                     <div className={mgcStyles.leftContent}>
                         <div style={{display: showGearModel ? '' : 'none'}}>
-                            { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} /> : null }
+                            { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} manufacturerId={manufacturerId} /> : null }
                         </div>
                     </div>
                 </div>
