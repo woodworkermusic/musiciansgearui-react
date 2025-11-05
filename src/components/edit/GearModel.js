@@ -5,7 +5,7 @@ import GearModelService from '../../services/gearmodelservice.ts';
 import SampleImages from '../list/SampleImages.js'; 
 import dto_GearModel from '../../models/dto_gearmodel.ts';
 
-function GearModel({gearModelId, manufacturerId}) {
+function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
     const [dataId, setDataId] = useState(gearModelId);
     const [modelName, setModelName] = useState();
     const [isActive, setIsActive] = useState();
@@ -32,12 +32,12 @@ function GearModel({gearModelId, manufacturerId}) {
                 .then((result)=> {
                     setDataId(result.gearModelId);
                     setButtonText('Update');
-                    // refreshData();
+                    cbRefreshData();
                 });
         }
         else if (dataId > 0) {
             gearModel.modifiedBy = "system";
-            // GearModelService.update(modelName, isActive, '1').then(()=> refreshData());
+            // GearModelService.update(modelName, isActive, '1').then(()=> cbRefreshData());
         }
     }
 
@@ -98,6 +98,7 @@ function GearModel({gearModelId, manufacturerId}) {
                 </tbody>
             </table>
             <div><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></div>
+            <div><button onClick={()=> cbRefreshData(manufacturerId, gearTypeId)}>Test Refresh</button></div>
             <SampleImages parentId={dataId} idValues={imageIdValues} imageType={'gearmodel'} /> 
         </>
     );

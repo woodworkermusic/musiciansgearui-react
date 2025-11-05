@@ -5,6 +5,10 @@ import GearModelService from '../../services/gearmodelservice.ts';
 function GearModelsByManufacturer({manufacturerId, gearTypeId, expanded, cbModelClicked}) {
     const [listData, setListData] = useState([]);
 
+    const refreshData = ()=> {
+        GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));
+    }
+    
     useEffect(()=> {
         if (expanded) {
             GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));

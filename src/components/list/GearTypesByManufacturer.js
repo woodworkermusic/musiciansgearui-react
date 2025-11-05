@@ -5,7 +5,7 @@ import GearModelsByManufacturer from './GearModelsByManufacturer.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
-function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel}) {
+function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel, refreshModels}) {
     const [listData, setListData] = useState([]);
     const [expandModels, setExpanded] = useState({});
 
@@ -22,7 +22,11 @@ function GearTypesByManufacturer({manufacturerId, expanded, cbInitGearModel}) {
                 <FontAwesomeIcon className={mgcStyles.marginRight} icon={expandModels[m.value.gearTypeId] ? faAngleUp :faAngleDown} />
                 {m.value.gearTypeName}
             </span>
-            <GearModelsByManufacturer manufacturerId={manufacturerId} gearTypeId={m.value.gearTypeId} expanded={expandModels[m.value.gearTypeId]} cbModelClicked={cbInitGearModel} />
+            <GearModelsByManufacturer 
+                manufacturerId={manufacturerId} 
+                gearTypeId={m.value.gearTypeId} 
+                expanded={expandModels[m.value.gearTypeId]} 
+                cbModelClicked={cbInitGearModel} />
         </li>
     ));
 

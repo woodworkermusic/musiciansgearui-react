@@ -15,9 +15,10 @@ import mgcStyles from './css/MusiciansGearCommon.module.css';
 import Home from './home.js';
 import About from './components/About.js';
 import SignIn from './components/user/SignIn.js';
-import GearModels from './components/list/GearModels.js';
+// import GearModels from './components/list/GearModels.js';
 import GearTypes from './components/list/GearTypes.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
+import GearModels from './components/treeview/GearModels.js';
 
 const modalStyle = {
   content: {

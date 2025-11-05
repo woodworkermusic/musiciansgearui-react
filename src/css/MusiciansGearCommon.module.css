@@ -384,6 +384,10 @@ body {
     margin-right: 5px;
 }
 
+.marginLeft { 
+    margin-left: 5px;
+}
+
 .stdDisplayTable td {
     padding:2px 2px 2px 2px;
     color:ivory;
