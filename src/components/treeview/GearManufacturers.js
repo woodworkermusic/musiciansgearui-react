@@ -16,7 +16,9 @@ const GearManufacturers = forwardRef(
 
             refreshModels(manufacturerId, gearTypeId) {
                 console.log('refreshing; in GearManufacturers');
-                let typeRefObj = typeRefs.find(m => { return m.manufacturerId === manufacturerId });
+                console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
+
+                let typeRefObj = typeRefs.find(m => { return m.manufacturerId === parseInt(manufacturerId) });
                 typeRefObj.childRef.current.refreshModels(manufacturerId, gearTypeId);
             }
         }));

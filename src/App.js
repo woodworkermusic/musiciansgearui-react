@@ -87,10 +87,11 @@ function App() {
                 <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
                 <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
+                <Link className={mgcStyles.popInMenuLink} onClick={toggleMenu}>My Gear</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
+                <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
               </nav>
             </div> 

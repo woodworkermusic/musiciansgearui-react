@@ -32,7 +32,7 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
                 .then((result)=> {
                     setDataId(result.gearModelId);
                     setButtonText('Update');
-                    cbRefreshData();
+                    cbRefreshData(manufacturerId, gearTypeId);
                 });
         }
         else if (dataId > 0) {
@@ -88,9 +88,9 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
                     </tr>
                     <tr>
                         <td>Starting Date:</td>
-                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={startDate} /></td>
+                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={startDate} onChange={e => setStartDate(e.target.value)} /></td>
                         <td>Ending Date:</td>
-                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={endDate} /></td>
+                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={endDate} onChange={e => setEndDate(e.target.value)} /></td>
                     </tr>
                     <tr>
                         <td>Active? <input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>

@@ -19,11 +19,13 @@ const GearTypesByManufacturer = forwardRef(
                 console.log('refreshing; in GearTypesByManufacturer');
                 console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
 
-                let modelRefObj = modelRefs.find(m => { return m.manufacturerId === manufacturerId && m.gearTypeId === gearTypeId });
+                let modelRefObj = modelRefs.find(m => { return m.manufacturerId === parseInt(manufacturerId) && m.gearTypeId === parseInt(gearTypeId) });
 
                 if (modelRefObj !== undefined) {
                     modelRefObj.childRef.current.refreshData(manufacturerId, gearTypeId);
                 }
+                else
+                    console.log('unable to find reference');
             }
         }));
 
@@ -64,7 +66,7 @@ const GearTypesByManufacturer = forwardRef(
                 GearTypeService.getByManufacturer(manufacturerId).then(response => {
                     setListData(response);
 
-                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
+                let refData = response.map((r) => ({manufacturerId: manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
 
                 setModelRefs(refData);
                 });

@@ -25,8 +25,15 @@ function Register({ closeDialogClick }) {
         newUser.phoneNumber = phoneNumber;
         newUser.newUserPassword = loginPwd;
 
-        ApiService.sendPost('UserProfile/Register', newUser);
-        closeDialogClick();
+        ApiService.sendPost('UserProfile/Register', newUser)
+            .then((response) => {
+                if (response === true) {
+                    closeDialogClick();
+                }
+                else {
+                    alert('oops - something is wrong');
+                }
+            })
     }
 
     return (
@@ -41,53 +48,63 @@ function Register({ closeDialogClick }) {
 
             <br className={mgcStyles.clearBreak} />
 
-            <div className={mgcStyles.marginTop}>
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>User Name:</span>
-                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="25" maxLength="40" onChange={e => setUserName(e.target.value)} value={userName}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>Password:</span>
-                    <input type="password" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="15" maxLength="30" onChange={e => setLoginPwd(e.target.value)} value={loginPwd}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>First Name:</span>
-                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="25" maxLength="50" onChange={e => setFirstName(e.target.value)} value={firstName}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>Last Name:</span>
-                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="25" maxLength="50" onChange={e => setLastName(e.target.value)} value={lastName}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>Date of Birth:</span>
-                    <input type="date" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        onChange={e => setDateOfBirth(e.target.value)} value={dateOfBirth}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>e-mail Address:</span>
-                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="40" maxLength="255" onChange={e => setEmail(e.target.value)} value={email}/>
-                </div>
-
-                <div className={mgcStyles.marginTop}>
-                    <span className={mgcStyles.marginTop}>Phone Number:</span>
-                    <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
-                        size="25" maxLength="40" onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber}/>
-                </div>
-
-                <div className={mgcStyles.marginTopBottom}>
-                    <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.leftContent}`} onClick={registerUser}>Register</button>
-                </div>
-            </div>
+            <table className={mgcStyles.marginTop}>
+                <tbody>
+                    <tr>
+                        <td>User Name:</td>
+                        <td><input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                            size="25" maxLength="40" onChange={e => setUserName(e.target.value)} value={userName}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td>
+                            <input type="password" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                size="15" maxLength="30" onChange={e => setLoginPwd(e.target.value)} value={loginPwd}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td>
+                            <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                size="25" maxLength="50" onChange={e => setFirstName(e.target.value)} value={firstName}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td>
+                            <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                size="25" maxLength="50" onChange={e => setLastName(e.target.value)} value={lastName}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth:</td>
+                        <td>
+                            <input type="date" className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                onChange={e => setDateOfBirth(e.target.value)} value={dateOfBirth}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>e-mail Address:</td>
+                        <td>
+                            <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                size="40" maxLength="255" onChange={e => setEmail(e.target.value)} value={email}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone Number:</td>
+                        <td>
+                            <input className={`${mgcStyles.softInput} ${mgcStyles.marginTopBottom}`} 
+                                size="25" maxLength="40" onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2" align="center">
+                            <button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.leftContent}`} onClick={registerUser}>Register</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>            
     );
 }

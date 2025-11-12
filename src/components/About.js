@@ -3,7 +3,7 @@ import mgcStyles from '../css/MusiciansGearCommon.module.css';
 export default function About() 
 {
     return (
-        <div className={`${mgcStyles.marginTop} ${mgcStyles.marginBottom} ${mgcStyles.aboutContent}`}>
+        <div className={`${mgcStyles.marginTop} ${mgcStyles.marginBottom} ${mgcStyles.marginLeft} ${mgcStyles.aboutContent}`}>
             Welcome to The Gear Registry!
             <br />
             <br />

@@ -16,18 +16,21 @@ function GearModels() {
     }, []);
 
     const selectGearModel = (gearModelId, manufacturerId)=> {
-        setManufacturerId(manufacturerId);
-        setModelId(gearModelId);
-
         if (showGearModel) {
+            setModelId(-1);  // force it closed ?
             setShowGearModel(false);
         }
+
+        setManufacturerId(manufacturerId);
+        setModelId(gearModelId);
         setShowGearModel(true);
     }
 
     const refreshData = (manufacturerId, gearTypeId)=> {
         console.log('refreshing; in GearModels');
         console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
+
+        if (manufacturerId === undefined || gearTypeId === undefined) return;
         mfrRef.current.refreshModels(manufacturerId, gearTypeId);
     };
 
@@ -42,7 +45,7 @@ function GearModels() {
                     </div>
 
                     <div className={`${mgcStyles.leftContent} ${mgcStyles.marginTop}`} style={{display: showGearModel ? '' : 'none'}}>
-                        { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} manufacturerId={manufacturerId} cbRefreshData={refreshData}/> : null }
+                        { showGearModel && (selectedModelId !== undefined) && (selectedModelId >= 0) ? <GearModel gearModelId={selectedModelId} manufacturerId={manufacturerId} cbRefreshData={refreshData}/> : null }
                     </div>
                     <br className={mgcStyles.clearBreak} />
                 </div>
