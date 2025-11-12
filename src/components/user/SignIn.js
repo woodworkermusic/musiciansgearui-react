@@ -3,7 +3,7 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useState } from 'react';
 import ApiService from '../../services/apiservice.ts';
 
-function SignIn({ closeSignInClick }) {
+function SignIn({ closeDialogClick }) {
     // const [loginId, setLoginId] = useState('');
     // const [loginPwd, setLoginPwd] = useState('');
 
@@ -21,8 +21,8 @@ function SignIn({ closeSignInClick }) {
             email: 'guitars.and.outdoors@gmail.com'
         };
 
-        var loginResult = ApiService.sendPost('https://localhost:44326/api/Access/SignIn', loginData);
-        closeSignInClick();
+        ApiService.sendPost('https://localhost:44326/api/Access/SignIn', loginData);
+        closeDialogClick();
     }
 
     return (
@@ -30,7 +30,7 @@ function SignIn({ closeSignInClick }) {
             <div className={mgcStyles.header_Dialog}>
                 <span className={mgcStyles.leftContent}>Sign In</span>
                 <div>
-                    <button onClick={closeSignInClick} className={`${mgcStyles.rightContent} ${mgcStyles.customBtn} ${mgcStyles.customBtnClose}`}>X</button>
+                    <button onClick={closeDialogClick} className={`${mgcStyles.rightContent} ${mgcStyles.customBtn} ${mgcStyles.customBtnClose}`}>X</button>
                 </div>
                 <br className={mgcStyles.clearBreak} />
             </div>

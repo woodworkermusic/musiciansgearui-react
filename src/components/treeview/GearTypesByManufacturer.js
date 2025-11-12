@@ -8,7 +8,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 const GearTypesByManufacturer = forwardRef(
-    ({manufacturerId, expanded, cbInitGearModel}, ref) => {
+    ({expanded, manufacturerId, cbInitGearModel}, ref) => {
+        useImperativeHandle(ref, ()=> ({
+            refreshTypes(manufacturerId) {
+                GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
+            },
+
+            refreshModels(manufacturerId, gearTypeId) {
+                if (!expanded) return;
+                console.log('refreshing; in GearTypesByManufacturer');
+                console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
+
+                let modelRefObj = modelRefs.find(m => { return m.manufacturerId === manufacturerId && m.gearTypeId === gearTypeId });
+
+                if (modelRefObj !== undefined) {
+                    modelRefObj.childRef.current.refreshData(manufacturerId, gearTypeId);
+                }
+            }
+        }));
+
         const [listData, setListData] = useState([]);
         const [expandModels, setExpanded] = useState({});
         const [modelRefs, setModelRefs] = useState([]);
@@ -31,7 +49,8 @@ const GearTypesByManufacturer = forwardRef(
                     gearTypeId={m.value.gearTypeId} 
                     expanded={expandModels[m.value.gearTypeId]} 
                     cbModelClicked={cbInitGearModel}
-                    ref={modelRefs[i]} />
+                    ref={modelRefs[i].childRef} 
+                    />
             </li>
         ));
 
@@ -40,24 +59,13 @@ const GearTypesByManufacturer = forwardRef(
             e.stopPropagation();
         }
 
-        useImperativeHandle(ref, ()=> ({
-            refreshTypes(manufacturerId) {
-                GearTypeService.getByManufacturer(manufacturerId).then(response => setListData(response));
-            },
-
-            refreshModels(manufacturerId, gearTypeId) {
-                // let typeRef = typeRefs.find(({manufacturerId, gearTypeId}) => manufacturerId === refreshId);
-                console.log('types; refreshing models');
-                modelRefs[gearTypeId].current.refreshData(manufacturerId, gearTypeId);
-            }
-        }));
-
         useEffect(()=> {
             if (expanded) {
                 GearTypeService.getByManufacturer(manufacturerId).then(response => {
                     setListData(response);
 
-                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, gearTypeId: r.value.gearTypeId, typeRef: createRef() }));
+                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
+
                 setModelRefs(refData);
                 });
             }

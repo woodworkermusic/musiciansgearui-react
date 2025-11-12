@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serviceApiBase = 'https://localhost:44326/api/';
+const serviceApiBase = 'http://127.0.0.1:24680/api/';
 
 const ApiService = {
     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {

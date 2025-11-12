@@ -4,7 +4,14 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import GearModelService from '../../services/gearmodelservice.ts';
 
 const GearModelsByManufacturer = forwardRef(
-    ({manufacturerId, gearTypeId, expanded, cbModelClicked}, ref) => {
+    ({expanded, manufacturerId, gearTypeId, cbModelClicked}, ref) => {
+        useImperativeHandle(ref, ()=> ({
+            refreshData(manufacturerId, gearTypeId) {
+                console.log('refreshing models');
+                GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));
+            }
+        }));
+    
         const [listData, setListData] = useState([]);
 
         useEffect(()=> {
@@ -14,17 +21,10 @@ const GearModelsByManufacturer = forwardRef(
         }, [manufacturerId, gearTypeId, expanded]);
 
         const selectModel = (e)=> {
-            cbModelClicked(e.target.id);
+            cbModelClicked(e.target.id, manufacturerId);
             e.stopPropagation();
         }
 
-        useImperativeHandle(ref, ()=> ({
-            refreshData(manufacturerId, gearTypeId) {
-                console.log('refreshing models');
-                GearModelService.getByManufacturerAndType(manufacturerId, gearTypeId).then(response => setListData(response));
-            }
-        }));
-    
         return (
             <ul style={{display: (expanded ? '' : 'none')}} className={mgcStyles.innerList}>
             {

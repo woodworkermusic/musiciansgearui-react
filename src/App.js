@@ -14,8 +14,8 @@ import mgcStyles from './css/MusiciansGearCommon.module.css';
 
 import Home from './home.js';
 import About from './components/About.js';
+import Register from './components/user/Register.js';
 import SignIn from './components/user/SignIn.js';
-// import GearModels from './components/list/GearModels.js';
 import GearTypes from './components/list/GearTypes.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
 import GearModels from './components/treeview/GearModels.js';
@@ -35,15 +35,27 @@ const modalStyle = {
 function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   function displaySignIn() {
     setShowMenu(false);
+    setShowRegister(false);
     setShowSignIn(true);
+    setShowModal(true);
   }
 
-  function closeSignIn()
-  {
+  function displayRegister() {
+    setShowMenu(false);
     setShowSignIn(false);
+    setShowRegister(true);
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowRegister(false);
+    setShowSignIn(false);
+    setShowModal(false);
   }
 
   function toggleMenu() 
@@ -73,30 +85,32 @@ function App() {
               <nav>
                 <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
                 <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/register" onClick={toggleMenu}>Register</Link>
+                <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
                 <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
+                <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
               </nav>
             </div> 
             : null
           }
 
-          <Modal
-            isOpen={showSignIn}
-            onRequestClose={()=> setShowSignIn(false)}
+          <Modal 
+            isOpen={showModal}
+            opRequestClose={()=> setShowModal(false)}
             style={modalStyle}
             contentLabel="Da Modal"
           >
-            <SignIn closeSignInClick={closeSignIn} />
+            { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
+            { showRegister ? <Register closeDialogClick={closeModal} /> : null }
           </Modal>
       </div>
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/about" element={<About />} />
         <Route path="/gearmanufacturers" element={<GearManufacturers />} />

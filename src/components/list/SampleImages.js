@@ -120,7 +120,6 @@ function SampleImages({parentId, idValues, imageType}) {
     ));
 
     useEffect(()=> {
-        // load up the images.  idValues are a list of image id values from the *parent*, such as a GearModel.
         refreshImages();
     }, [parentId, idValues, imageType, refreshImages]);
 

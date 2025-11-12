@@ -8,6 +8,19 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
 const GearManufacturers = forwardRef(
     ({cbLoadGearModel}, ref) => {
+        useImperativeHandle(ref, ()=> ({
+            refreshTypes(manufacturerId) {
+                let typeRefObj = typeRefs.find(m => { return m.manufacturerId === manufacturerId });
+                typeRefObj.childRef.current.refreshTypes(manufacturerId);
+            },
+
+            refreshModels(manufacturerId, gearTypeId) {
+                console.log('refreshing; in GearManufacturers');
+                let typeRefObj = typeRefs.find(m => { return m.manufacturerId === manufacturerId });
+                typeRefObj.childRef.current.refreshModels(manufacturerId, gearTypeId);
+            }
+        }));
+
         const [treeData, setTreeData] = useState([]);
         const [expanded, setExpanded] = useState({});
         const [typeRefs, setTypeRefs] = useState([]);
@@ -17,23 +30,10 @@ const GearManufacturers = forwardRef(
                 let newData = response.map((r) => { r.showGearTypes = false; return r; });
                 setTreeData(newData);
 
-                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, typeRef: createRef() }));
+                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, childRef: createRef() }));
                 setTypeRefs(refData);
             });
         }, []);
-
-        useImperativeHandle(ref, ()=> ({
-            refreshTypes(refreshId) {
-                let typeRef = typeRefs.find(({manufacturerId}) => manufacturerId === refreshId);
-                typeRef.current.refreshTypes(refreshId);
-            },
-
-            refreshModels(refreshId, gearTypeId) {
-                console.log('manufacturers; refreshing models');
-                let typeRef = typeRefs.find(({manufacturerId}) => manufacturerId === refreshId);
-                typeRef.current.refreshModels(refreshId, gearTypeId);
-            }
-        }));
 
         const toggleExpanded = (i)=> {
             setExpanded({
@@ -49,10 +49,11 @@ const GearManufacturers = forwardRef(
                     <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
                 </div>
                 <GearTypesByManufacturer 
+                    ref={typeRefs[i].childRef} 
                     manufacturerId={m.value.manufacturerId} 
                     expanded={expanded[m.value.manufacturerId]} 
                     cbInitGearModel={cbLoadGearModel} 
-                    ref={typeRefs[m.value.manufacturerId]} /> 
+                    /> 
             </div>
         );
 

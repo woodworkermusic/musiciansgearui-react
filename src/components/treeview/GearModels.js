@@ -10,7 +10,7 @@ function GearModels() {
     const [selectedModelId, setModelId] = useState();
     const [manufacturerId, setManufacturerId] = useState();
 
-    const mfrRef = useRef(null);
+    const mfrRef = useRef();
 
     useEffect(()=> {
     }, []);
@@ -26,25 +26,27 @@ function GearModels() {
     }
 
     const refreshData = (manufacturerId, gearTypeId)=> {
-        // console.log('mfrRef:  ' + mfrRef.current);
-        // return;
+        console.log('refreshing; in GearModels');
+        console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
         mfrRef.current.refreshModels(manufacturerId, gearTypeId);
     };
 
     return (
         <>
             <div className={`${mgcStyles.marginLeft} ${mgcStyles.marginDblTop}`}>
-                <div className={`${mgcStyles.leftContent} ${mgcStyles.marginRight} ${mgcStyles.marginTop} ${mgcStyles.marginLeft}`}>
-                    <div className={mgcStyles.pageContent}>GEAR MODELS:</div>
-                    <GearManufacturers cbLoadGearModel={selectGearModel} ref={mfrRef} />
-                </div>
-                <div className={`${mgcStyles.leftContent}`} style={{display: showGearModel ? '' : 'none'}}>
-                    { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} manufacturerId={manufacturerId} cbRefreshData={refreshData}/> : null }
+                <div className={mgcStyles.pageContent}>GEAR MODELS:</div>
+
+                <div className={mgcStyles.marginDblTop}>
+                    <div className={`${mgcStyles.leftContent} ${mgcStyles.marginRight} ${mgcStyles.marginTop} ${mgcStyles.marginLeft}`}>
+                        <GearManufacturers cbLoadGearModel={selectGearModel} ref={mfrRef} />
+                    </div>
+
+                    <div className={`${mgcStyles.leftContent} ${mgcStyles.marginTop}`} style={{display: showGearModel ? '' : 'none'}}>
+                        { selectedModelId !== undefined ? <GearModel gearModelId={selectedModelId} manufacturerId={manufacturerId} cbRefreshData={refreshData}/> : null }
+                    </div>
+                    <br className={mgcStyles.clearBreak} />
                 </div>
             </div>
-
-            <br className={mgcStyles.clearBreak} />
-            <div><button onClick={()=> refreshData(1, 2)}>test refresh</button></div>
         </>
     );
 }

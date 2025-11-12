@@ -50,27 +50,27 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
 
         GearTypeService.get(0).then(response => {
             setGearTypes(response);
+
+            setDataId(gearModelId);
+            setModelName('');
+            setIsActive(true);
+            setStartDate(new Date().toLocaleDateString('en-CA'));
+            setEndDate('2026-01-01');
+            setGearTypeId(0);
+            setImageIdValues([]);
+
+            if (gearModelId > 0) {
+                GearModelService.get(gearModelId).then(response => {
+                    setModelName(response.modelName);
+                    setIsActive(response.active);
+                    setStartDate(new Date(response.startingDate).toLocaleDateString('en-CA'));
+                    setEndDate(response.endingDate !== null ? new Date(response.endingDate).toLocaleDateString('en-CA') : '2026-01-01');
+                    setGearTypeId(response.gearTypeId);
+                    setImageIdValues(response.imageIdList);
+                });
+            }
+            setButtonText(gearModelId === 0 ? 'Add' :'Update');
         });
-
-        setDataId(gearModelId);
-        setModelName('');
-        setIsActive(true);
-        setStartDate(new Date().toLocaleDateString('en-CA'));
-        setEndDate('2026-01-01');
-        setGearTypeId(0);
-        setImageIdValues([]);
-
-        if (gearModelId > 0) {
-            GearModelService.get(gearModelId).then(response => {
-                setModelName(response.modelName);
-                setIsActive(response.active);
-                setStartDate(new Date(response.startingDate).toLocaleDateString('en-CA'));
-                setEndDate(response.endingDate !== null ? new Date(response.endingDate).toLocaleDateString('en-CA') : '2026-01-01');
-                setGearTypeId(response.gearTypeId);
-                setImageIdValues(response.imageIdList);
-            });
-        }
-        setButtonText(gearModelId === 0 ? 'Add' :'Update');
     }, [gearModelId, manufacturerId]);
 
     return (
@@ -98,8 +98,8 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
                 </tbody>
             </table>
             <div><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></div>
-            <div><button onClick={()=> cbRefreshData(manufacturerId, gearTypeId)}>Test Refresh</button></div>
-            <SampleImages parentId={dataId} idValues={imageIdValues} imageType={'gearmodel'} /> 
+
+            { imageIdValues.length > 0 ? <SampleImages parentId={dataId} idValues={imageIdValues} imageType={'gearmodel'} /> : null }
         </>
     );
 }
