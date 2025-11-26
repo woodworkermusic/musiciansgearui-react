@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import {
-  BrowserRouter,
   Link,
   Route,
   Routes,
+  useNavigate
 } from 'react-router-dom';
+
+import { ErrorBoundary } from "react-error-boundary";
 
 import Modal from 'react-modal';
 
@@ -38,6 +40,32 @@ function App() {
   const [showRegister, setShowRegister] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const navigate = useNavigate();
+
+  function logError(error) {
+    console.error(error);
+  }
+  
+  const errorHandler = ()=> {
+    navigate('/');
+    window.location.reload();
+  }
+  
+  function errorFallback() {
+    return (
+      <>
+          <table className={mgcStyles.stdDisplayTable}>
+          <tbody>
+            <tr>
+              <td>The application has had a problem and must reset.</td>
+              <td><button  className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={errorHandler}>Continue</button></td>
+            </tr>
+          </tbody>
+          </table>
+      </>
+    )
+  }
+  
   function displaySignIn() {
     setShowMenu(false);
     setShowRegister(false);
@@ -68,57 +96,57 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <div className={mgcStyles.mainBody} id="mainBody">
-          <div className={mgcStyles.headerBar}>
-              <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
-                  <span className={mgcStyles.headerBarText} id="mainBody_HeaderTitle" onClick={toggleMenu}>&#x2630;</span>
-              </span>
-              <span className={mgcStyles.rightContent} id="mainBody_HeaderRight">
-                  The Gear Registry
-              </span>
-              <br className={mgcStyles.clearBreak} />
-          </div>
+    <ErrorBoundary FallbackComponent={errorFallback} onError={logError}>
+          <div className={mgcStyles.mainBody} id="mainBody">
+            <div className={mgcStyles.headerBar}>
+                <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
+                    <span className={mgcStyles.headerBarText} id="mainBody_HeaderTitle" onClick={toggleMenu}>&#x2630;</span>
+                </span>
+                <span className={mgcStyles.rightContent} id="mainBody_HeaderRight">
+                    The Gear Registry
+                </span>
+                <br className={mgcStyles.clearBreak} />
+            </div>
 
-          { showMenu ?
-            <div className={mgcStyles.popInMenu}>
-              <nav>
-                <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
-                <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
-                <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
-                <Link className={mgcStyles.popInMenuLink} onClick={toggleMenu}>My Gear</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
-                <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
-              </nav>
-            </div> 
-            : null
-          }
+            { showMenu ?
+              <div className={mgcStyles.popInMenu}>
+                <nav>
+                  <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
+                  <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
+                  <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
+                  <Link className={mgcStyles.popInMenuLink} onClick={toggleMenu}>My Gear</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
+                </nav>
+              </div> 
+              : null
+            }
 
-          <Modal 
-            isOpen={showModal}
-            opRequestClose={()=> setShowModal(false)}
-            style={modalStyle}
-            contentLabel="Da Modal"
-          >
-            { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
-            { showRegister ? <Register closeDialogClick={closeModal} /> : null }
-          </Modal>
-      </div>
+            <Modal 
+              isOpen={showModal}
+              opRequestClose={()=> setShowModal(false)}
+              style={modalStyle}
+              contentLabel="Da Modal"
+            >
+              { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
+              { showRegister ? <Register closeDialogClick={closeModal} /> : null }
+            </Modal>
+        </div>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/gearmanufacturers" element={<GearManufacturers />} />
-        <Route path="/gearmodels" element={<GearModels />} />
-        <Route path="/geartypes" element={<GearTypes />} />
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/gearmanufacturers" element={<GearManufacturers />} />
+          <Route path="/gearmodels" element={<GearModels />} />
+          <Route path="/geartypes" element={<GearTypes />} />
+        </Routes>
+    </ErrorBoundary> 
   );
 }
 
