@@ -4,7 +4,7 @@ import GearManufacturer from '../edit/GearManufacturer.js';
 import GearManufacturerService from '../../services/gearmanufacturerservice.ts';
 import dto_GearManufacturer from '../../models/dto_gearmanufacturer.ts';
 
-function GearManufacturers() {
+function GearManufacturers({cbToggleLoading}) {
     const [listData, setListData] = useState([]);
     const [showEdit, setShowEdit] = useState(false);
     const [mfrData, setData] = useState();
@@ -38,8 +38,11 @@ function GearManufacturers() {
 
     useEffect(()=> {
         console.log('loading data');
-        GearManufacturerService.getMany().then(response => setListData(response));
-    }, []);
+        GearManufacturerService.getMany().then(response => {
+            setListData(response);
+            cbToggleLoading();
+        });
+    }, [cbToggleLoading]);
 
     return (
         <>

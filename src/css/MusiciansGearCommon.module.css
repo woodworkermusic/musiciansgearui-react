@@ -7,6 +7,11 @@ body {
     font-size: 10pt;
 }
 
+.loadingSpinner {
+    max-height: 60px;
+    max-width: 60px;
+}
+
 .customBtn {
     border-radius: 6px;
 	-moz-border-radius: 6px;

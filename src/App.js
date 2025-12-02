@@ -21,6 +21,10 @@ import SignIn from './components/user/SignIn.js';
 import GearTypes from './components/list/GearTypes.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
 import GearModels from './components/treeview/GearModels.js';
+import Loading from './components/Loading.js';
+import ProtectedRoutes from './ProtectedRoutes.js';
+
+// import { PATHS, ROLE_PATHS } from './Paths.ts';
 
 const modalStyle = {
   content: {
@@ -39,6 +43,8 @@ function App() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   const navigate = useNavigate();
 
@@ -91,6 +97,18 @@ function App() {
     showMenu ? setShowMenu(false) : setShowMenu(true);
   }
 
+  function selectMenu(loadingValue) {
+    toggleMenu();
+    setLoadingText(loadingValue);
+    setShowLoading(true);
+    setShowModal(true);
+  }
+
+  function toggleLoading() {
+    setShowModal(false);
+    setShowLoading(false);
+  }
+
   useEffect(()=> {
     Modal.setAppElement('#mainBody');
   }, []);
@@ -112,14 +130,12 @@ function App() {
               <div className={mgcStyles.popInMenu}>
                 <nav>
                   <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
-                  <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
                   <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
                   <Link className={mgcStyles.popInMenuLink} onClick={toggleMenu}>My Gear</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/gearmanufacturers" onClick={toggleMenu}>Gear Manufacturers</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/geartypes" onClick={toggleMenu}>Gear Types</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/gearmodels" onClick={toggleMenu}>Gear Models</Link>
+                  <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
+                  <ProtectedRoutes cbToggleMenu={toggleMenu} cbSelectMenu={selectMenu} />
                   <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
+                  <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
                   <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
                 </nav>
               </div> 
@@ -134,6 +150,7 @@ function App() {
             >
               { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
               { showRegister ? <Register closeDialogClick={closeModal} /> : null }
+              { showLoading ? <Loading loadingText={loadingText} /> : null }
             </Modal>
         </div>
 
@@ -142,7 +159,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/about" element={<About />} />
-          <Route path="/gearmanufacturers" element={<GearManufacturers />} />
+          <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
           <Route path="/gearmodels" element={<GearModels />} />
           <Route path="/geartypes" element={<GearTypes />} />
         </Routes>

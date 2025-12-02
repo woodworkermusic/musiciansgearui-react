@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { createRef, forwardRef } from 'react';
 
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
@@ -16,16 +16,19 @@ const GearTypesByManufacturer = forwardRef(
 
             refreshModels(manufacturerId, gearTypeId) {
                 if (!expanded) return;
-                console.log('refreshing; in GearTypesByManufacturer');
-                console.log('manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
+                console.log('refreshing; in GearTypesByManufacturer.  manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
 
                 let modelRefObj = modelRefs.find(m => { return m.manufacturerId === parseInt(manufacturerId) && m.gearTypeId === parseInt(gearTypeId) });
 
                 if (modelRefObj !== undefined) {
                     modelRefObj.childRef.current.refreshData(manufacturerId, gearTypeId);
                 }
-                else
-                    console.log('unable to find reference');
+                else {
+                    console.log('unable to find reference; manufacturerId:  ' + manufacturerId + '; gearTypeId:  ' + gearTypeId);
+                    console.log('refreshing gear types');
+                    refreshGearTypes();
+                    toggleExpanded(gearTypeId);
+                }
             }
         }));
 
@@ -61,17 +64,21 @@ const GearTypesByManufacturer = forwardRef(
             e.stopPropagation();
         }
 
+        const refreshGearTypes = useCallback((manufacturerId)=> {
+            GearTypeService.getByManufacturer(manufacturerId).then(response => {
+                setListData(response);
+
+            let refData = response.map((r) => ({manufacturerId: manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
+
+            setModelRefs(refData);
+            });
+        }, []);
+
         useEffect(()=> {
             if (expanded) {
-                GearTypeService.getByManufacturer(manufacturerId).then(response => {
-                    setListData(response);
-
-                let refData = response.map((r) => ({manufacturerId: manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
-
-                setModelRefs(refData);
-                });
+                refreshGearTypes(manufacturerId);
             }
-        }, [expanded, manufacturerId]);
+        }, [expanded, manufacturerId, refreshGearTypes]);
 
         return (
             <ul style={{display: (expanded ? '' : 'none')}} className={mgcStyles.innerList}>

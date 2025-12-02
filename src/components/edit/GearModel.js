@@ -9,8 +9,8 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
     const [dataId, setDataId] = useState(gearModelId);
     const [modelName, setModelName] = useState();
     const [isActive, setIsActive] = useState();
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
+    const [startYear, setStartYear] = useState();
+    const [endYear, setEndYear] = useState();
     const [gearTypeId, setGearTypeId] = useState();
     const [imageIdValues, setImageIdValues] = useState([]);
 
@@ -23,8 +23,8 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
         gearModel.manufacturerId = manufacturerId;
         gearModel.gearTypeId = gearTypeId;
         gearModel.modelName = modelName;
-        gearModel.startingDate = startDate;
-        gearModel.endingDate = endDate;
+        gearModel.startYear = startYear;
+        gearModel.endYear = endYear;
 
         if (dataId === 0) {
             gearModel.createdBy = "system";
@@ -54,8 +54,10 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             setDataId(gearModelId);
             setModelName('');
             setIsActive(true);
-            setStartDate(new Date().toLocaleDateString('en-CA'));
-            setEndDate('2026-01-01');
+
+            var currentYear = new Date().getFullYear();
+            setStartYear(currentYear);
+            setEndYear(currentYear + 1);
             setGearTypeId(0);
             setImageIdValues([]);
 
@@ -63,8 +65,8 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
                 GearModelService.get(gearModelId).then(response => {
                     setModelName(response.modelName);
                     setIsActive(response.active);
-                    setStartDate(new Date(response.startingDate).toLocaleDateString('en-CA'));
-                    setEndDate(response.endingDate !== null ? new Date(response.endingDate).toLocaleDateString('en-CA') : '2026-01-01');
+                    setStartYear(response.startYear);
+                    setEndYear(response.endYear !== null ? response.endYear : '2026');
                     setGearTypeId(response.gearTypeId);
                     setImageIdValues(response.imageIdList);
                 });
@@ -87,10 +89,10 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
                         <td colSpan="3"><input className={mgcStyles.softInput} size="40" maxLength="60" onChange={e => setModelName(e.target.value)} value={modelName} /></td>
                     </tr>
                     <tr>
-                        <td>Starting Date:</td>
-                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={startDate} onChange={e => setStartDate(e.target.value)} /></td>
-                        <td>Ending Date:</td>
-                        <td><input type="date" className={mgcStyles.softInput} size="10" maxLength="10" value={endDate} onChange={e => setEndDate(e.target.value)} /></td>
+                        <td>Start Year:</td>
+                        <td><input className={mgcStyles.softInput} size="5" maxLength="4" value={startYear} onChange={e => setStartYear(e.target.value)} /></td>
+                        <td>End Year:</td>
+                        <td><input className={mgcStyles.softInput} size="5" maxLength="4" value={endYear} onChange={e => setEndYear(e.target.value)} /></td>
                     </tr>
                     <tr>
                         <td>Active? <input type="checkbox" onChange={e => setIsActive(e.target.value)} checked={isActive} /></td>

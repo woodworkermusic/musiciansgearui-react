@@ -5,6 +5,6 @@ export default class dto_GearModel extends EntityBase {
     manufacturerId: number;
     gearTypeId: number;
     modelName: string;
-    startDate: Date | null;
-    endDate: Date | null;
+    startYear: number | null;
+    endYear: number | null;
 }

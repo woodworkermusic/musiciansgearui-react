@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/0fa07718-bc11-4a47-9d88-32958c678d68/resourceGroups/rg-MusiciansGearRegistry/providers/Microsoft.Web/sites/musiciansgearregistry",
+    "appService.deploySubpath": "build"
+}
