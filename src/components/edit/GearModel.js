@@ -1,5 +1,5 @@
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelService from '../../services/gearmodelservice.ts';
 import SampleImages from '../list/SampleImages.js'; 
@@ -16,6 +16,8 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
 
     const [buttonText, setButtonText] = useState();
     const [gearTypes, setGearTypes] = useState([]);
+
+    const imagesRef = useRef();
 
     function addUpdate() {
         let gearModel = new dto_GearModel();
@@ -45,6 +47,18 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             <option key={m.key} value={m.value.gearTypeId}>{m.value.gearTypeName}</option>
         ));
     
+    const loadGearModel = useCallback(()=> {
+        GearModelService.get(gearModelId).then(response => {
+            setModelName(response.modelName);
+            setIsActive(response.active);
+            setStartYear(response.startYear);
+            setEndYear(response.endYear !== null ? response.endYear : '2026');
+            setGearTypeId(response.gearTypeId);
+            setImageIdValues(response.imageIdList);
+            imagesRef.current.refreshImages(imageIdValues);
+        });
+    }, [gearModelId, imageIdValues, imagesRef]);
+
     useEffect(()=> {
         if (gearModelId === undefined) return;  // has to be zero or a valid model 
 
@@ -62,18 +76,11 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             setImageIdValues([]);
 
             if (gearModelId > 0) {
-                GearModelService.get(gearModelId).then(response => {
-                    setModelName(response.modelName);
-                    setIsActive(response.active);
-                    setStartYear(response.startYear);
-                    setEndYear(response.endYear !== null ? response.endYear : '2026');
-                    setGearTypeId(response.gearTypeId);
-                    setImageIdValues(response.imageIdList);
-                });
+                loadGearModel();
             }
             setButtonText(gearModelId === 0 ? 'Add' :'Update');
         });
-    }, [gearModelId, manufacturerId]);
+    }, [gearModelId, manufacturerId, loadGearModel]);
 
     return (
         <>
@@ -101,7 +108,7 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             </table>
             <div><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></div>
 
-            { imageIdValues.length > 0 ? <SampleImages parentId={dataId} idValues={imageIdValues} imageType={'gearmodel'} /> : null }
+            <SampleImages parentId={dataId} imageType={'gearmodel'} ref={imagesRef} /> 
         </>
     );
 }
