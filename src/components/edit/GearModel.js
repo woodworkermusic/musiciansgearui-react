@@ -12,7 +12,6 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
     const [startYear, setStartYear] = useState();
     const [endYear, setEndYear] = useState();
     const [gearTypeId, setGearTypeId] = useState();
-    const [imageIdValues, setImageIdValues] = useState([]);
 
     const [buttonText, setButtonText] = useState();
     const [gearTypes, setGearTypes] = useState([]);
@@ -47,25 +46,24 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             <option key={m.key} value={m.value.gearTypeId}>{m.value.gearTypeName}</option>
         ));
     
-    const loadGearModel = useCallback(()=> {
+    const loadGearModel = useCallback((gearModelId)=> {
         GearModelService.get(gearModelId).then(response => {
             setModelName(response.modelName);
             setIsActive(response.active);
             setStartYear(response.startYear);
             setEndYear(response.endYear !== null ? response.endYear : '2026');
             setGearTypeId(response.gearTypeId);
-            setImageIdValues(response.imageIdList);
-            imagesRef.current.refreshImages(imageIdValues);
+            imagesRef.current.refreshImages(response.imageIdList);
         });
-    }, [gearModelId, imageIdValues, imagesRef]);
+    }, [imagesRef]);
 
     useEffect(()=> {
-        if (gearModelId === undefined) return;  // has to be zero or a valid model 
+        if ((gearModelId === undefined) || (gearModelId < 0)) return;  // has to be zero or a valid model 
 
-        GearTypeService.get(0).then(response => {
+        GearTypeService.getMany().then(response => {
             setGearTypes(response);
-
             setDataId(gearModelId);
+
             setModelName('');
             setIsActive(true);
 
@@ -73,11 +71,12 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             setStartYear(currentYear);
             setEndYear(currentYear + 1);
             setGearTypeId(0);
-            setImageIdValues([]);
 
             if (gearModelId > 0) {
-                loadGearModel();
+                console.log('gearModelId change; ' + gearModelId);
+                loadGearModel(gearModelId);
             }
+
             setButtonText(gearModelId === 0 ? 'Add' :'Update');
         });
     }, [gearModelId, manufacturerId, loadGearModel]);

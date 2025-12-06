@@ -4,7 +4,7 @@ import GearType from '../edit/GearType.js';
 import GearTypeService from '../../services/geartypeservice.ts';
 import dto_GearType from '../../models/dto_geartype.ts';
 
-function GearTypes() {
+function GearTypes({cbToggleLoading}) {
     const [listData, setListData] = useState([]);
     const [showEdit, setShowEdit] = useState(false);
     const [gearTypeData, setData] = useState();
@@ -33,13 +33,15 @@ function GearTypes() {
     ));
 
     function triggerRefresh() {
-        console.log('refreshing list trois');
         GearTypeService.getMany().then(response => setListData(response));
     }
 
     useEffect(()=> {
-        GearTypeService.getMany().then(response => setListData(response));
-    }, []);
+        GearTypeService.getMany().then(response => {
+            setListData(response)
+            cbToggleLoading();
+        });
+    }, [cbToggleLoading]);
 
     return (
         <>

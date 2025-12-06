@@ -37,7 +37,6 @@ function GearManufacturers({cbToggleLoading}) {
     };
 
     useEffect(()=> {
-        console.log('loading data');
         GearManufacturerService.getMany().then(response => {
             setListData(response);
             cbToggleLoading();

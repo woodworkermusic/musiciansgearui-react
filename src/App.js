@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   Link,
@@ -104,10 +104,10 @@ function App() {
     setShowModal(true);
   }
 
-  function toggleLoading() {
+  const toggleLoading = useCallback(()=> {
     setShowModal(false);
     setShowLoading(false);
-  }
+  }, []);
 
   useEffect(()=> {
     Modal.setAppElement('#mainBody');
@@ -161,7 +161,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
           <Route path="/gearmodels" element={<GearModels />} />
-          <Route path="/geartypes" element={<GearTypes />} />
+          <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
         </Routes>
     </ErrorBoundary> 
   );

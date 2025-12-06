@@ -12,26 +12,42 @@ const SampleImages = forwardRef(
 		useImperativeHandle(ref, ()=> ({
 			refreshImages(idList) {
 				console.log('refreshing images; count:  ' + idList.length);
-				setIdValues(idList);
-				displayImages();
+
+				let imgArray = [];
+				let promiseArray = [];
+
+				for (var i = 0; i < idList.length; i++)
+				{
+					promiseArray.push(new Promise((resolve, reject) => {
+						ImageService.get(idList[i], imageType).then((response) => 
+							resolve(imgArray.push(response))
+						)
+					}));
+				}
+
+				Promise.all(promiseArray).then(setListData(imgArray));
 			}
 		}));
-
-		function displayImages() {
-			let imgArray = [];
-
-			for (var i = 0; i < idValues.length; i++)
-			{
-				ImageService.get(idValues[i], imageType)
-					.then((response) => imgArray.push(response));
-			}
-
-			setListData(imgArray);
-		}
 
 		const [idValues, setIdValues] = useState([]);
 		const [listData, setListData] = useState([]);
 		const [selectedFile, setSelectedFile] = useState(null);
+
+		const displayImages = ()=> {
+			let imgArray = [];
+			let promiseArray = [];
+
+			for (var i = 0; i < idValues.length; i++)
+			{
+				promiseArray.push(new Promise((resolve, reject) => {
+					ImageService.get(idValues[i], imageType).then((response) => 
+						resolve(imgArray.push(response))
+					)
+				}));
+			}
+
+			Promise.all(promiseArray).then(setListData(imgArray));
+		}
 
 		const onFileChange = (event) => {
 			setSelectedFile(event.target.files[0]);
