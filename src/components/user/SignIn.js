@@ -2,6 +2,7 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 
 import { useState } from 'react';
 import ApiService from '../../services/apiservice.ts';
+import { ApiMethod } from '../../enums/apimethod.ts';
 
 function SignIn({ closeDialogClick }) {
     // const [loginId, setLoginId] = useState('');
@@ -21,7 +22,7 @@ function SignIn({ closeDialogClick }) {
             email: 'guitars.and.outdoors@gmail.com'
         };
 
-        ApiService.sendPost('https://localhost:44326/api/Access/SignIn', loginData);
+        ApiService.send('https://localhost:44326/api/Access/SignIn', ApiMethod.post, loginData);
         closeDialogClick();
     }
 

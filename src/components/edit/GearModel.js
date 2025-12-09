@@ -1,5 +1,5 @@
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import GearTypeService from '../../services/geartypeservice.ts';
 import GearModelService from '../../services/gearmodelservice.ts';
 import SampleImages from '../list/SampleImages.js'; 
@@ -15,8 +15,6 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
 
     const [buttonText, setButtonText] = useState();
     const [gearTypes, setGearTypes] = useState([]);
-
-    const imagesRef = useRef();
 
     function addUpdate() {
         let gearModel = new dto_GearModel();
@@ -48,14 +46,14 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
     
     const loadGearModel = useCallback((gearModelId)=> {
         GearModelService.get(gearModelId).then(response => {
+            setDataId(gearModelId);
             setModelName(response.modelName);
             setIsActive(response.active);
             setStartYear(response.startYear);
             setEndYear(response.endYear !== null ? response.endYear : '2026');
             setGearTypeId(response.gearTypeId);
-            imagesRef.current.refreshImages(response.imageIdList);
         });
-    }, [imagesRef]);
+    }, []);
 
     useEffect(()=> {
         if ((gearModelId === undefined) || (gearModelId < 0)) return;  // has to be zero or a valid model 
@@ -107,7 +105,7 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
             </table>
             <div><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={addUpdate}>{buttonText}</button></div>
 
-            <SampleImages parentId={dataId} imageType={'gearmodel'} ref={imagesRef} /> 
+            <SampleImages parentId={dataId} imageType={'gearmodel'} /> 
         </>
     );
 }

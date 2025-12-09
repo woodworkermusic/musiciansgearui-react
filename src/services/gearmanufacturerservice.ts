@@ -1,4 +1,5 @@
 import ApiService from './apiservice.ts';
+import { ApiMethod } from '../enums/apimethod.ts';
 import dto_GearManufacturer from '../models/dto_gearmanufacturer.ts';
 import { GearManufacturer } from '../models/gearmanufacturer.ts';
 
@@ -15,7 +16,7 @@ const GearManufacturerService = {
         newManufacturer.active = isActive;
         newManufacturer.manufacturerName = manufacturerName;
 
-        return ApiService.sendPost<GearManufacturer>(svcUrlExtension, newManufacturer);
+        return ApiService.send<GearManufacturer>(svcUrlExtension, ApiMethod.post, newManufacturer);
     },
 
     update: (id: number
@@ -30,10 +31,8 @@ const GearManufacturerService = {
     },
 
     get: (id: number)=> {
-        return ApiService.sendGet(`${svcUrlExtension}/${id}`);
+        return ApiService.send(`${svcUrlExtension}/${id}`, ApiMethod.get, null);
     },
-
-    //     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
 
     getMany: async(): Promise<GearManufacturer[]> => {
         var search = {
@@ -43,7 +42,7 @@ const GearManufacturerService = {
             includeDeleted: false
         };
 
-        return ApiService.sendPost<GearManufacturer[]>(`${svcUrlExtension}/Search`, search);
+        return ApiService.send<GearManufacturer[]>(`${svcUrlExtension}/Search`, ApiMethod.post, search);
     }
 };
 

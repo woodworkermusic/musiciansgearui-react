@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ApiService from '../../services/apiservice.ts';
+import { ApiMethod } from '../enums/apimethod';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { dto_GearModelImage, dto_GearTypeImage, dto_UserGearImage } from "../../models/dto_imageupload.ts";
 import ImageService from '../../services/imageservice.ts';
@@ -28,7 +29,7 @@ function UploadImage({imageType}) {
 						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
 						newImage.ImageData = ImageService.encodeDataUrl(dataString);
-						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
+						ApiService.send(`ImageContent/${imageType}`, ApiMethod.post, newImage);
 						break;
 					}
 				case "geartype":
@@ -39,7 +40,7 @@ function UploadImage({imageType}) {
 						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
 						newImage.ImageData = ImageService.encodeDataUrl(dataString);
-						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
+						ApiService.send(`ImageContent/${imageType}`, ApiMethod.post, newImage);
 						break;
 					}
 				case "usergear":
@@ -50,7 +51,7 @@ function UploadImage({imageType}) {
 						newImage.ImageType = fileType;
 						newImage.ImageFile = selectedFile.name;
 						newImage.ImageData = ImageService.encodeDataUrl(dataString);
-						ApiService.sendPost(`ImageContent/${imageType}`, newImage);
+						ApiService.send(`ImageContent/${imageType}`, ApiMethod.post, newImage);
 						break;
 					}
 			}

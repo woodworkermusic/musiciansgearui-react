@@ -27,6 +27,16 @@ body {
     padding-bottom:2px;
     text-decoration:none;
     outline:none;
+    cursor: pointer;
+}
+
+.customBtnTrash {
+    padding: 4px 4px 4px 4px;
+    background-color: transparent;
+    border-radius: 4px;
+    color: ivory;
+    border: none;
+    cursor: pointer;
 }
 
 .customBtnClose {

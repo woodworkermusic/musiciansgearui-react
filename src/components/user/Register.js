@@ -2,6 +2,7 @@ import { useState } from 'react';
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import dto_RegisterUser from '../../models/dto_registeruser.ts';
 import ApiService from '../../services/apiservice.ts';
+import { ApiMethod } from '../../enums/apimethod.ts';
 
 function Register({ closeDialogClick }) {
     const [userName, setUserName] = useState();
@@ -25,7 +26,7 @@ function Register({ closeDialogClick }) {
         newUser.phoneNumber = phoneNumber;
         newUser.newUserPassword = loginPwd;
 
-        ApiService.sendPost('UserProfile/Register', newUser)
+        ApiService.send('UserProfile/Register', ApiMethod.post, newUser)
             .then((response) => {
                 if (response === true) {
                     closeDialogClick();

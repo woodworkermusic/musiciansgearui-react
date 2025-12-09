@@ -1,4 +1,5 @@
 import ApiService from './apiservice.ts';
+import { ApiMethod } from '../enums/apimethod.ts';
 import dto_GearType from '../models/dto_geartype.ts';
 import { GearType } from '../models/geartype.ts';
 
@@ -15,7 +16,7 @@ const GearTypeService = {
         newData.active = isActive;
         newData.gearTypeName = typeName;
 
-        return ApiService.sendPost<GearType>(svcUrlExtension, newData);
+        return ApiService.send<GearType>(svcUrlExtension, ApiMethod.post, newData);
     },
 
     update: (id: number
@@ -30,10 +31,8 @@ const GearTypeService = {
     },
 
     get: (id: number)=> {
-        return ApiService.sendGet(`${svcUrlExtension}/${id}`);
+        return ApiService.send(`${svcUrlExtension}/${id}`, ApiMethod.get, null);
     },
-
-    //     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
 
     getMany: async(): Promise<GearType[]> => {
         var search = {
@@ -43,11 +42,11 @@ const GearTypeService = {
             includeDeleted: false
         };
 
-        return ApiService.sendPost<GearType[]>(`${svcUrlExtension}/Search`, search);
+        return ApiService.send<GearType[]>(`${svcUrlExtension}/Search`, ApiMethod.post, search);
     },
 
     getByManufacturer: async(id: number): Promise<GearType[]> => {
-        return ApiService.sendGet<GearType[]>(`${svcUrlExtension}/manufacturer/${id}`);
+        return ApiService.send<GearType[]>(`${svcUrlExtension}/manufacturer/${id}`, ApiMethod.get, null);
     }
 };
 

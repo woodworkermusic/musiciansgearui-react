@@ -1,166 +1,134 @@
-import { useEffect, useImperativeHandle, useState } from 'react';
-import { forwardRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import ApiService from '../../services/apiservice.ts';
+import { ApiMethod } from '../../enums/apimethod.ts';
 import ImageService from '../../services/imageservice.ts';
-import { dto_GearModelImage, dto_GearTypeImage, dto_UserGearImage } from "../../models/dto_imageupload.ts";
+import { ImageUpload } from '../../models/imageupload.ts';
+
 import { Buffer } from 'buffer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
-const SampleImages = forwardRef(
-	({parentId, imageType}, ref) => {
-		useImperativeHandle(ref, ()=> ({
-			refreshImages(idList) {
-				console.log('refreshing images; count:  ' + idList.length);
+function SampleImages({parentId, imageType}) {
+	// const [idValues, setIdValues] = useState([]);
+	const [listData, setListData] = useState([]);
+	const [selectedFile, setSelectedFile] = useState(null);
 
-				let imgArray = [];
-				let promiseArray = [];
+	const loadImages = useCallback(()=> {
+		// get the id list; then get the actual images
+		ImageService.getIdList(parentId, imageType)
+			.then((response) => {
+				setListData([]);
+				response.forEach((id)=> {
+					let imgArray = [];
+					let promiseArray = [];
 
-				for (var i = 0; i < idList.length; i++)
-				{
-					promiseArray.push(new Promise((resolve, reject) => {
-						ImageService.get(idList[i], imageType).then((response) => 
-							resolve(imgArray.push(response))
-						)
-					}));
-				}
+					response.forEach((id)=> 
+						promiseArray.push(ImageService.get(id, imageType).then((response) => imgArray.push(response)))
+					);
 
-				Promise.all(promiseArray).then(setListData(imgArray));
-			}
-		}));
-
-		const [idValues, setIdValues] = useState([]);
-		const [listData, setListData] = useState([]);
-		const [selectedFile, setSelectedFile] = useState(null);
-
-		const displayImages = ()=> {
-			let imgArray = [];
-			let promiseArray = [];
-
-			for (var i = 0; i < idValues.length; i++)
-			{
-				promiseArray.push(new Promise((resolve, reject) => {
-					ImageService.get(idValues[i], imageType).then((response) => 
-						resolve(imgArray.push(response))
-					)
-				}));
-			}
-
-			Promise.all(promiseArray).then(setListData(imgArray));
-		}
-
-		const onFileChange = (event) => {
-			setSelectedFile(event.target.files[0]);
-		};
-
-		const onFileUpload = () => {
-			const fileReader = new FileReader();
-
-			fileReader.addEventListener('load', ()=> {
-				let dataResult = fileReader.result;
-
-				let fileType = dataResult.split(',')[0];
-				let dataString = dataResult.split(',')[1];
-
-				switch (imageType) {
-					case "gearmodel":
-						{	
-							let newImage = new dto_GearModelImage();
-							newImage.CreatedBy = "system";
-							newImage.GearModelId = parentId;
-							newImage.ImageType = fileType;
-							newImage.ImageFile = selectedFile.name;
-							newImage.ImageData = ImageService.encodeDataUrl(dataString);
-
-							ApiService.sendPost(`ImageContent/${imageType}`, newImage)
-								.then((response) => {
-									setIdValues(idValues => [...idValues, response.gearModelImageId]);
-									displayImages();
-								});
-							break;
-						}
-					case "geartype":
-						{
-							let newImage = new dto_GearTypeImage();
-							newImage.CreatedBy = "system";
-							newImage.GearTypeId = parentId;
-							newImage.ImageType = fileType;
-							newImage.ImageFile = selectedFile.name;
-							newImage.ImageData = ImageService.encodeDataUrl(dataString);
-							ApiService.sendPost(`ImageContent/${imageType}`, newImage);
-							break;
-						}
-					case "usergear":
-						{
-							let newImage = new dto_UserGearImage();
-							newImage.CreatedBy = "system";
-							newImage.UserGearId = parentId;
-							newImage.ImageType = fileType;
-							newImage.ImageFile = selectedFile.name;
-							newImage.ImageData = ImageService.encodeDataUrl(dataString);
-							ApiService.sendPost(`ImageContent/${imageType}`, newImage);
-							break;
-						}
-					default: break;
-				}
+					Promise.allSettled(promiseArray).then(()=> {
+						setListData(imgArray);
+					});
+				});
 			});
+	}, [parentId, imageType]);
 
-			fileReader.readAsDataURL(selectedFile);
-		};
+	const deleteImage = (imageId)=> {
+		ImageService.delete(imageId, imageType)
+			.then((response) => loadImages());
+	}
 
-		const fileData = () => {
-			if (selectedFile) {
-				return (
-					<table className={mgcStyles.stdDisplayTable}>
-						<tbody>
-							<tr>
-								<td>File Name:  {selectedFile.name}</td>
-							</tr>
-							<tr>
-								<td>File Type:  {selectedFile.type}</td>
-							</tr>
-							<tr>
-								<td>Last Modified:  {selectedFile.lastModifiedDate.toDateString()}</td>
-							</tr>
-							<tr>
-								<td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={onFileUpload}>Upload</button></td>
-							</tr>
-						</tbody>
-					</table>
-				);
-			} else {
-				return;
-			}
-		};
+	const onFileChange = (event) => {
+		setSelectedFile(event.target.files[0]);
+	};
 
-		function convertToImage(imageData) {
-			let bufferObj = Buffer.from(imageData, "base64");
-			let base64String = bufferObj.toString("utf8");
+	const onFileUpload = () => {
+		const fileReader = new FileReader();
 
-			return base64String;
+		fileReader.addEventListener('load', ()=> {
+			let dataResult = fileReader.result;
+
+			let fileType = dataResult.split(',')[0];
+			let dataString = dataResult.split(',')[1];
+
+			let newImage = new ImageUpload();
+			newImage.createdBy = "system";
+			newImage.parentId = parentId;
+			newImage.imageType = fileType;
+			newImage.imageFile = selectedFile.name;
+			newImage.imageData = ImageService.encodeDataUrl(dataString);
+
+			ApiService.send(`ImageContent/${imageType}`, ApiMethod.post, newImage)
+				.then((response) => {
+					// setIdValues(idValues => [...idValues, response.gearModelImageId]);
+					// displayImages();
+				});
+		});
+
+		fileReader.readAsDataURL(selectedFile);
+	};
+
+	const fileData = () => {
+		if (selectedFile) {
+			return (
+				<table className={mgcStyles.stdDisplayTable}>
+					<tbody>
+						<tr>
+							<td>File Name:  {selectedFile.name}</td>
+						</tr>
+						<tr>
+							<td>File Type:  {selectedFile.type}</td>
+						</tr>
+						<tr>
+							<td>Last Modified:  {selectedFile.lastModifiedDate.toDateString()}</td>
+						</tr>
+						<tr>
+							<td><button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen}`} onClick={onFileUpload}>Upload</button></td>
+						</tr>
+					</tbody>
+				</table>
+			);
+		} else {
+			return;
 		}
+	};
 
-		const mappedData = listData.map(listItem => (
-			<div key={listItem.key} className={mgcStyles.marginDblTop}><img alt='' src={listItem.value.imageType + ',' + convertToImage(listItem.value.imageData)} className={mgcStyles.sampleImage}></img></div>
-		));
+	function convertToImage(imageData) {
+		let bufferObj = Buffer.from(imageData, "base64");
+		let base64String = bufferObj.toString("utf8");
 
-		useEffect(()=> {
-		}, [parentId, imageType]);  
+		return base64String;
+	}
 
-		return (
-			<>
-			<div className={`${mgcStyles.marginTopBottom} ${mgcStyles.pageContent}`}>
-				Sample Images:
-				<button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`} onClick={()=> document.getElementById('fileUpload').click()}>+</button>
-				<div>
-					<input type="file" id="fileUpload" onChange={onFileChange} style={{display:'none'}} />
-				</div>
-				{fileData()}
+	const mappedData = listData.map(listItem => (
+		<div key={listItem.key} className={mgcStyles.marginDblTop}>
+			<img alt='' src={listItem.value.imageType + ',' + convertToImage(listItem.value.imageData)} className={`${mgcStyles.leftContent} ${mgcStyles.sampleImage}`}></img>
+			<button className={`${mgcStyles.customBtnTrash} ${mgcStyles.leftContent} ${mgcStyles.marginLeft}`} onClick={()=> deleteImage(listItem.value.imageId)}>
+				<FontAwesomeIcon icon={faTrashCan} />
+			</button>
+			<br className={mgcStyles.clearBreak} />
+		</div>
+	));
+
+	useEffect(()=> {
+		loadImages();
+	}, [parentId, imageType, loadImages]);  
+
+	return (
+		<>
+		<div className={`${mgcStyles.marginTopBottom} ${mgcStyles.pageContent}`}>
+			Sample Images:
+			<button className={`${mgcStyles.customBtn} ${mgcStyles.customBtnGreen} ${mgcStyles.marginLeft}`} onClick={()=> document.getElementById('fileUpload').click()}>+</button>
+			<div>
+				<input type="file" id="fileUpload" onChange={onFileChange} style={{display:'none'}} />
 			</div>
-			{mappedData}
-			</>
-		);
-	}	
-)
+			{fileData()}
+		</div>
+		{mappedData}
+		</>
+	);
+}	
 
 export default SampleImages;

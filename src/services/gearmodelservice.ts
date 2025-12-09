@@ -1,4 +1,5 @@
 import ApiService from './apiservice.ts';
+import { ApiMethod } from '../enums/apimethod.ts';
 import dto_GearModel from '../models/dto_gearmodel.ts';
 import { GearModel } from '../models/gearmodel.ts';
 
@@ -7,7 +8,7 @@ const svcUrlExtension = 'GearModel';
 const GearModelService = {
     add: async(newModel: dto_GearModel
         ): Promise<GearModel> => {
-        return ApiService.sendPost<GearModel>(svcUrlExtension, newModel);
+        return ApiService.send<GearModel>(svcUrlExtension, ApiMethod.post, newModel);
     },
 
     update: (gearModel: dto_GearModel
@@ -20,10 +21,8 @@ const GearModelService = {
     },
 
     get: async(id: number): Promise<GearModel> => {
-        return ApiService.sendGet<GearModel>(`${svcUrlExtension}/${id}`);
+        return ApiService.send<GearModel>(`${svcUrlExtension}/${id}`, ApiMethod.get, null);
     },
-
-    //     sendPost: async<T>(postUrl: string, postData: any): Promise<T> => {
 
     getMany: async(): Promise<GearModel[]> => {
         var search = {
@@ -33,11 +32,11 @@ const GearModelService = {
             includeDeleted: false
         };
 
-        return ApiService.sendPost<GearModel[]>(`${svcUrlExtension}/Search`, search);
+        return ApiService.send<GearModel[]>(`${svcUrlExtension}/Search`, ApiMethod.post, search);
     },
 
     getByManufacturerAndType: async(manufacturerId: number, gearTypeId: number): Promise<GearModel[]> => {
-        return ApiService.sendGet<GearModel[]>(`${svcUrlExtension}/manufacturer/${manufacturerId}/geartype/${gearTypeId}`);
+        return ApiService.send<GearModel[]>(`${svcUrlExtension}/manufacturer/${manufacturerId}/geartype/${gearTypeId}`, ApiMethod.get, null);
     }
 };
 

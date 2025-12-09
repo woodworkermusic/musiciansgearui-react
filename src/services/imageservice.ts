@@ -1,4 +1,5 @@
 import ApiService from './apiservice.ts';
+import { ApiMethod } from '../enums/apimethod.ts';
 import { Buffer } from 'buffer';
 
 const svcUrlExtension = 'ImageContent';
@@ -12,16 +13,16 @@ const ImageService = {
 
     },
 
-    delete: async(): Promise<any> => {
-
+    delete: async(id: number, imageType: string): Promise<any> => {
+        return ApiService.send(`${svcUrlExtension}/${imageType}/${id}`, ApiMethod.delete, null);
     },
 
     get: async(id: number, imageType: string): Promise<any> => {
-        return ApiService.sendGet(`${svcUrlExtension}/${imageType}/${id}`);
+        return ApiService.send(`${svcUrlExtension}/${imageType}/${id}`, ApiMethod.get, null);
     },
 
     getIdList: (id: number, imageType: string) => {
-        
+        return ApiService.send(`${svcUrlExtension}/${imageType}/${id}/idlist`, ApiMethod.get, null);
     },
 
     encodeDataUrl: (dataString: string) => {
