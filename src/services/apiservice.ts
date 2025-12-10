@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiMethod } from '../enums/apimethod.ts';
 
-// const serviceApiBase = 'http://127.0.0.1:24680/api/';
+// const serviceApiBase = 'https://localhost:44326/api/';
 const serviceApiBase = 'https://musiciansgearregistryapi-apim.azure-api.net/api/';
 
 const apiHeaders = {

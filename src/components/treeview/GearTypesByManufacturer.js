@@ -39,20 +39,20 @@ const GearTypesByManufacturer = forwardRef(
         const toggleExpanded = (i)=> {
             setExpanded({
                 ...expandModels,
-                [i.gearTypeId] : !expandModels[i.gearTypeId]
+                [i] : !expandModels[i]
             });
         };
 
         const mappedData = listData.map((m, i) => (
-            <li key={m.key} onClick={()=> toggleExpanded(m.value)}>
+            <li key={m.mapKey} onClick={()=> toggleExpanded(m.gearTypeId)}>
                 <span className={mgcStyles.innerListLink}>
-                    <FontAwesomeIcon className={mgcStyles.marginRight} icon={expandModels[m.value.gearTypeId] ? faAngleUp :faAngleDown} />
-                    {m.value.gearTypeName}
+                    <FontAwesomeIcon className={mgcStyles.marginRight} icon={expandModels[m.gearTypeId] ? faAngleUp :faAngleDown} />
+                    {m.gearTypeName}
                 </span>
                 <GearModelsByManufacturer 
                     manufacturerId={manufacturerId} 
-                    gearTypeId={m.value.gearTypeId} 
-                    expanded={expandModels[m.value.gearTypeId]} 
+                    gearTypeId={m.gearTypeId} 
+                    expanded={expandModels[m.gearTypeId]} 
                     cbModelClicked={cbInitGearModel}
                     ref={modelRefs[i].childRef} 
                     />
@@ -68,7 +68,7 @@ const GearTypesByManufacturer = forwardRef(
             GearTypeService.getByManufacturer(manufacturerId).then(response => {
                 setListData(response);
 
-            let refData = response.map((r) => ({manufacturerId: manufacturerId, gearTypeId: r.value.gearTypeId, childRef: createRef() }));
+            let refData = response.map((r) => ({manufacturerId: manufacturerId, gearTypeId: r.gearTypeId, childRef: createRef() }));
 
             setModelRefs(refData);
             });

@@ -29,7 +29,7 @@ function GearManufacturers({cbToggleLoading}) {
     }, []);
 
     const mappedData = listData.map(listItem => (
-        <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.value.manufacturerId)}>{listItem.value.manufacturerName}</div>
+        <div key={listItem.mapKey} className={mgcStyles.selectListLink} onClick={()=> selectManufacturer(listItem.manufacturerId)}>{listItem.manufacturerName}</div>
     ));
 
     function triggerRefresh() {

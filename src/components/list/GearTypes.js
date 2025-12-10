@@ -29,7 +29,7 @@ function GearTypes({cbToggleLoading}) {
     }, []);
 
     const mappedData = listData.map(listItem => (
-        <div key={listItem.key} className={mgcStyles.selectListLink} onClick={()=> selectGearType(listItem.value.gearTypeId)}>{listItem.value.gearTypeName}</div>
+        <div key={listItem.mapKey} className={mgcStyles.selectListLink} onClick={()=> selectGearType(listItem.gearTypeId)}>{listItem.gearTypeName}</div>
     ));
 
     function triggerRefresh() {

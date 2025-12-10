@@ -41,7 +41,7 @@ function GearModel({gearModelId, manufacturerId, cbRefreshData}) {
     }
 
     const mappedGearTypes = gearTypes.map(m => (
-            <option key={m.key} value={m.value.gearTypeId}>{m.value.gearTypeName}</option>
+            <option key={m.key} value={m.gearTypeId}>{m.gearTypeName}</option>
         ));
     
     const loadGearModel = useCallback((gearModelId)=> {

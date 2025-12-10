@@ -29,7 +29,7 @@ const GearModelsByManufacturer = forwardRef(
             <ul style={{display: (expanded ? '' : 'none')}} className={mgcStyles.innerList}>
             {
                 listData.map(listItem => (
-                    <li key={listItem.key} id={listItem.value.gearModelId} className={mgcStyles.innerListLink} onClick={selectModel}>{listItem.value.modelName}</li>
+                    <li key={listItem.key} id={listItem.gearModelId} className={mgcStyles.innerListLink} onClick={selectModel}>{listItem.modelName}</li>
                 ))
             }
             </ul>

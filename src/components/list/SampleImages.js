@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 function SampleImages({parentId, imageType}) {
-	// const [idValues, setIdValues] = useState([]);
 	const [listData, setListData] = useState([]);
 	const [selectedFile, setSelectedFile] = useState(null);
 
@@ -37,7 +36,13 @@ function SampleImages({parentId, imageType}) {
 
 	const deleteImage = (imageId)=> {
 		ImageService.delete(imageId, imageType)
-			.then((response) => loadImages());
+			.then((response) => {
+				if (response === true) // remove from the dom 
+				{
+					let imageList = listData.filter((listItem) => listItem.imageId !== imageId);
+					setListData(imageList);
+				}
+			}); 
 	}
 
 	const onFileChange = (event) => {
@@ -62,6 +67,7 @@ function SampleImages({parentId, imageType}) {
 
 			ApiService.send(`ImageContent/${imageType}`, ApiMethod.post, newImage)
 				.then((response) => {
+					// add the image to the dom; no need to do a reload from the db
 					// setIdValues(idValues => [...idValues, response.gearModelImageId]);
 					// displayImages();
 				});
@@ -104,8 +110,8 @@ function SampleImages({parentId, imageType}) {
 
 	const mappedData = listData.map(listItem => (
 		<div key={listItem.key} className={mgcStyles.marginDblTop}>
-			<img alt='' src={listItem.value.imageType + ',' + convertToImage(listItem.value.imageData)} className={`${mgcStyles.leftContent} ${mgcStyles.sampleImage}`}></img>
-			<button className={`${mgcStyles.customBtnTrash} ${mgcStyles.leftContent} ${mgcStyles.marginLeft}`} onClick={()=> deleteImage(listItem.value.imageId)}>
+			<img alt='' src={listItem.imageType + ',' + convertToImage(listItem.imageData)} className={`${mgcStyles.leftContent} ${mgcStyles.sampleImage}`}></img>
+			<button className={`${mgcStyles.customBtnTrash} ${mgcStyles.leftContent} ${mgcStyles.marginLeft}`} onClick={()=> deleteImage(listItem.imageId)}>
 				<FontAwesomeIcon icon={faTrashCan} />
 			</button>
 			<br className={mgcStyles.clearBreak} />

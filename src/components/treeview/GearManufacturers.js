@@ -32,7 +32,7 @@ const GearManufacturers = forwardRef(
                 let newData = response.map((r) => { r.showGearTypes = false; return r; });
                 setTreeData(newData);
 
-                let refData = response.map((r) => ({manufacturerId: r.value.manufacturerId, childRef: createRef() }));
+                let refData = response.map((r) => ({manufacturerId: r.manufacturerId, childRef: createRef() }));
                 setTypeRefs(refData);
             });
         }, []);
@@ -40,20 +40,20 @@ const GearManufacturers = forwardRef(
         const toggleExpanded = (i)=> {
             setExpanded({
                 ...expanded,
-                [i.manufacturerId] : !expanded[i.manufacturerId]
+                [i] : !expanded[i]
             });
         };
 
         const mappedData = treeData.map((m, i) => 
-            <div key={m.key}>
-                <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.value)}>
-                    <FontAwesomeIcon className={mgcStyles.marginRight} icon={expanded[m.value.manufacturerId] ? faAngleUp :faAngleDown} />
-                    <span className={mgcStyles.marginRight}>{m.value.manufacturerName}</span>
+            <div key={m.mapKey}>
+                <div className={mgcStyles.selectListLink} onClick={()=> toggleExpanded(m.manufacturerId)}>
+                    <FontAwesomeIcon className={mgcStyles.marginRight} icon={expanded[m.manufacturerId] ? faAngleUp :faAngleDown} />
+                    <span className={mgcStyles.marginRight}>{m.manufacturerName}</span>
                 </div>
                 <GearTypesByManufacturer 
                     ref={typeRefs[i].childRef} 
-                    manufacturerId={m.value.manufacturerId} 
-                    expanded={expanded[m.value.manufacturerId]} 
+                    manufacturerId={m.manufacturerId} 
+                    expanded={expanded[m.manufacturerId]} 
                     cbInitGearModel={cbLoadGearModel} 
                     /> 
             </div>
