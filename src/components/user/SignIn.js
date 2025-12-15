@@ -3,18 +3,20 @@ import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 import { useState } from 'react';
 import ApiService from '../../services/apiservice.ts';
 import { ApiMethod } from '../../enums/apimethod.ts';
+import { jwtDecode } from 'jwt-decode';
+import UserInfo from '../../models/userinfo.ts';
 
 function SignIn({ closeDialogClick }) {
     // const [loginId, setLoginId] = useState('');
     // const [loginPwd, setLoginPwd] = useState('');
 
     const [loginId, setLoginId] = useState('DonQuixote');
-    const [loginPwd, setLoginPwd] = useState('@v3ryl0ngPa$$w0rd');
+    const [loginPwd, setLoginPwd] = useState('@t3stPa$$w0rd');
 
     function signIn() 
     {
         var loginData = {
-            loginType: 'user',
+            loginType: 'username',
             userName: loginId,
             password: loginPwd,
             token: '',
@@ -22,7 +24,19 @@ function SignIn({ closeDialogClick }) {
             email: 'guitars.and.outdoors@gmail.com'
         };
 
-        ApiService.send('https://localhost:44326/api/Access/SignIn', ApiMethod.post, loginData);
+        ApiService.send('Access/Login', ApiMethod.post, loginData)
+            .then((response) => {
+                if (response.success) {
+                    let accessToken = response.accessToken;
+
+                    let decodedToken = jwtDecode(accessToken);
+                    console.log(decodedToken);
+
+                    // mgruser
+                    let userInfo = new UserInfo();
+                    userInfo = JSON.parse(decodedToken.mgrUser);
+                }
+            });
         closeDialogClick();
     }
 

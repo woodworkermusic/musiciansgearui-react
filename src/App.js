@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import AuthProvider from "./AuthProvider.js";
 
 import {
   Link,
@@ -115,6 +116,7 @@ function App() {
 
   return (
     <ErrorBoundary FallbackComponent={errorFallback} onError={logError}>
+        <AuthProvider>
           <div className={mgcStyles.mainBody} id="mainBody">
             <div className={mgcStyles.headerBar}>
                 <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
@@ -152,17 +154,18 @@ function App() {
               { showRegister ? <Register closeDialogClick={closeModal} /> : null }
               { showLoading ? <Loading loadingText={loadingText} /> : null }
             </Modal>
-        </div>
+          </div>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
-          <Route path="/gearmodels" element={<GearModels />} />
-          <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
+            <Route path="/gearmodels" element={<GearModels />} />
+            <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
+          </Routes>
+        </AuthProvider>
     </ErrorBoundary> 
   );
 }
