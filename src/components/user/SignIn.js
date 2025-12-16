@@ -1,10 +1,7 @@
 import mgcStyles from '../../css/MusiciansGearCommon.module.css';
 
 import { useState } from 'react';
-import ApiService from '../../services/apiservice.ts';
-import { ApiMethod } from '../../enums/apimethod.ts';
-import { jwtDecode } from 'jwt-decode';
-import UserInfo from '../../models/userinfo.ts';
+import AuthService from '../../services/authservice.ts';
 
 function SignIn({ closeDialogClick }) {
     // const [loginId, setLoginId] = useState('');
@@ -15,29 +12,16 @@ function SignIn({ closeDialogClick }) {
 
     function signIn() 
     {
-        var loginData = {
-            loginType: 'username',
-            userName: loginId,
-            password: loginPwd,
-            token: '',
-            externalToken: '',
-            email: 'guitars.and.outdoors@gmail.com'
-        };
-
-        ApiService.send('Access/Login', ApiMethod.post, loginData)
-            .then((response) => {
-                if (response.success) {
-                    let accessToken = response.accessToken;
-
-                    let decodedToken = jwtDecode(accessToken);
-                    console.log(decodedToken);
-
-                    // mgruser
-                    let userInfo = new UserInfo();
-                    userInfo = JSON.parse(decodedToken.mgrUser);
+        AuthService.login(loginId, loginPwd)
+            .then((success) => {
+                if (success) {
+                    closeDialogClick();
+                }
+                else 
+                {
+                    alert('oops - invalid login');
                 }
             });
-        closeDialogClick();
     }
 
     return (

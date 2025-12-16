@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import AuthProvider from "./AuthProvider.js";
 
 import {
   Link,
@@ -23,8 +22,9 @@ import GearTypes from './components/list/GearTypes.js';
 import GearManufacturers from './components/list/GearManufacturers.js';
 import GearModels from './components/treeview/GearModels.js';
 import Loading from './components/Loading.js';
-import ProtectedRoutes from './ProtectedRoutes.js';
-
+import AdminLinks from './AdminLinks.js';
+import AuthService from './services/authservice.ts';
+import { Roles } from './enums/roles.ts';
 // import { PATHS, ROLE_PATHS } from './Paths.ts';
 
 const modalStyle = {
@@ -73,6 +73,11 @@ function App() {
     )
   }
   
+  const signOut = ()=> {
+    AuthService.logout();
+    setShowMenu(false);
+  }
+
   function displaySignIn() {
     setShowMenu(false);
     setShowRegister(false);
@@ -105,6 +110,28 @@ function App() {
     setShowModal(true);
   }
 
+  function UserLinks() {
+    if (AuthService.validUser()) {
+      return (
+        <>
+            <Link className={mgcStyles.popInMenuLink} to="/mygear" onClick={toggleMenu}>My Gear</Link>
+            <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
+        </>
+      );
+    }
+  }
+
+  function AdminRoutes() {
+    if (AuthService.hasRole(Roles.ADMIN)) {
+      return (
+        <>
+          <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
+          <Route path="/gearmodels" element={<GearModels />} />
+          <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
+        </>
+      )
+    }
+  }
   const toggleLoading = useCallback(()=> {
     setShowModal(false);
     setShowLoading(false);
@@ -116,56 +143,55 @@ function App() {
 
   return (
     <ErrorBoundary FallbackComponent={errorFallback} onError={logError}>
-        <AuthProvider>
-          <div className={mgcStyles.mainBody} id="mainBody">
-            <div className={mgcStyles.headerBar}>
-                <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
-                    <span className={mgcStyles.headerBarText} id="mainBody_HeaderTitle" onClick={toggleMenu}>&#x2630;</span>
-                </span>
-                <span className={mgcStyles.rightContent} id="mainBody_HeaderRight">
-                    The Gear Registry
-                </span>
-                <br className={mgcStyles.clearBreak} />
-            </div>
-
-            { showMenu ?
-              <div className={mgcStyles.popInMenu}>
-                <nav>
-                  <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
-                  <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
-                  <Link className={mgcStyles.popInMenuLink} onClick={toggleMenu}>My Gear</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/myprofile" onClick={toggleMenu}>My Profile</Link>
-                  <ProtectedRoutes cbToggleMenu={toggleMenu} cbSelectMenu={selectMenu} />
-                  <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
-                  <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
-                  <Link className={mgcStyles.popInMenuLink} to="/signout" onClick={toggleMenu}>Sign Out</Link>
-                </nav>
-              </div> 
-              : null
-            }
-
-            <Modal 
-              isOpen={showModal}
-              opRequestClose={()=> setShowModal(false)}
-              style={modalStyle}
-              contentLabel="Da Modal"
-            >
-              { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
-              { showRegister ? <Register closeDialogClick={closeModal} /> : null }
-              { showLoading ? <Loading loadingText={loadingText} /> : null }
-            </Modal>
+        <div className={mgcStyles.mainBody} id="mainBody">
+          <div className={mgcStyles.headerBar}>
+              <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
+                  <span className={mgcStyles.headerBarText} id="mainBody_HeaderTitle" onClick={toggleMenu}>&#x2630;</span>
+              </span>
+              <span className={mgcStyles.rightContent} id="mainBody_HeaderRight">
+                  The Gear Registry
+              </span>
+              <br className={mgcStyles.clearBreak} />
           </div>
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
-            <Route path="/gearmodels" element={<GearModels />} />
-            <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
-          </Routes>
-        </AuthProvider>
+          { showMenu ?
+            <div className={mgcStyles.popInMenu}>
+              <nav>
+                <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
+                <Link className={mgcStyles.popInMenuLink} onClick={displayRegister}>Register</Link>
+                <UserLinks />
+                <AdminLinks cbToggleMenu={toggleMenu} cbSelectMenu={selectMenu} />
+                <Link className={mgcStyles.popInMenuLink} to="/about" onClick={toggleMenu}>About</Link>
+
+                { 
+                  AuthService.validUser() ? 
+                  <Link className={mgcStyles.popInMenuLink} to="/" onClick={signOut}>Sign Out</Link> : 
+                  <Link className={mgcStyles.popInMenuLink} onClick={displaySignIn}>Sign In</Link>
+                }
+              </nav>
+            </div> 
+            : null
+          }
+
+          <Modal 
+            isOpen={showModal}
+            opRequestClose={()=> setShowModal(false)}
+            style={modalStyle}
+            contentLabel="none"
+          >
+            { showSignIn ? <SignIn closeDialogClick={closeModal} /> : null }
+            { showRegister ? <Register closeDialogClick={closeModal} /> : null }
+            { showLoading ? <Loading loadingText={loadingText} /> : null }
+          </Modal>
+        </div>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/about" element={<About />} />
+          <AdminRoutes />
+        </Routes>
     </ErrorBoundary> 
   );
 }
