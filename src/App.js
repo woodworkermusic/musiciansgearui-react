@@ -121,17 +121,6 @@ function App() {
     }
   }
 
-  function AdminRoutes() {
-    if (AuthService.hasRole(Roles.ADMIN)) {
-      return (
-        <>
-          <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
-          <Route path="/gearmodels" element={<GearModels />} />
-          <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
-        </>
-      )
-    }
-  }
   const toggleLoading = useCallback(()=> {
     setShowModal(false);
     setShowLoading(false);
@@ -190,7 +179,16 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/about" element={<About />} />
-          <AdminRoutes />
+
+          {
+              AuthService.hasRole(Roles.ADMIN) ?
+              <>
+                <Route path="/gearmanufacturers" element={<GearManufacturers cbToggleLoading={toggleLoading} />} />
+                <Route path="/gearmodels" element={<GearModels />} />
+                <Route path="/geartypes" element={<GearTypes cbToggleLoading={toggleLoading} />} />
+              </>
+              : null
+          }
         </Routes>
     </ErrorBoundary> 
   );

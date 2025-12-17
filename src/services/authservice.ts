@@ -5,7 +5,7 @@ import { UserInfo } from '../models/userinfo.ts';
 import { Roles } from '../enums/roles.ts';
 
 interface ExtendedJwt extends JwtPayload {
-    mgrUser: string;
+    mgruser: string;
 }
 
 const storageId = 'mgruser';
@@ -17,9 +17,9 @@ function getUserInfo(): UserInfo | null {
         return null;
 
     let decodedToken = jwtDecode<ExtendedJwt>(mgrUser);
-
+    
     let userInfo = new UserInfo();
-    userInfo = JSON.parse(decodedToken.mgrUser);
+    userInfo = JSON.parse(decodedToken.mgruser);
 
     return userInfo;
 }
