@@ -66,6 +66,12 @@ const AuthService = {
             return false;
 
         return (userInfo.roles.includes(roleName));
+    }, 
+
+    displayName: ()=> {
+        let userInfo = getUserInfo();
+        console.log(userInfo);
+        return (userInfo && userInfo.displayName !== null ? userInfo.displayName : '');
     }
 }
 

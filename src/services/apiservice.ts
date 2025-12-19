@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { ApiMethod } from '../enums/apimethod.ts';
 
-// const serviceApiBase = 'https://localhost:44326/api/';
-const serviceApiBase = 'https://musiciansgearregistryapi-apim.azure-api.net/api/';
+// const serviceApiBase = 'https://localhost:44326';
+const serviceApiBase = 'https://musiciansgearregistryapi-apim.azure-api.net';
 
 const apiHeaders = {
     'Content-Type': 'application/json'
@@ -15,23 +15,37 @@ const ApiService = {
       return axios({
           method: method,
           headers: apiHeaders,
-          url: `${serviceApiBase}${targetUrl}`,
+          url: `${serviceApiBase}/api/${targetUrl}`,
           data: payloadData
         })
         .then(response => {
           return response.data;
         })
         .catch(e => {
-          processError(e, targetUrl, method);
+          console.log(new Date().toLocaleString() + ' : ' + targetUrl);
+          console.log('ERROR:  ' + method);
+          console.log(e.message); 
           return null;
         });
-    }
-};
+    },
 
-const processError = (e: any, targetUrl: string, method: string)=> {
-  console.log(new Date().toLocaleString() + ' : ' + targetUrl);
-  console.log('ERROR:  ' + method);
-  console.log(e.message); 
-}
+    healthCheck: async(): Promise<boolean> => {
+      return axios({
+          method: ApiMethod.get,
+          headers: apiHeaders,
+          url: `${serviceApiBase}/Health`
+        })
+        .then((response) => {
+          return (response.data.toUpperCase() === 'HEALTHY');
+        })
+        .catch(e => {
+          if (e.response) {
+            console.log('error response:  ' + e.response);
+          }
+
+          return false;
+        })
+      }
+};
 
 export default ApiService;

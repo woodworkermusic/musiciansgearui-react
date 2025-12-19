@@ -24,6 +24,7 @@ import GearModels from './components/treeview/GearModels.js';
 import Loading from './components/Loading.js';
 import AdminLinks from './AdminLinks.js';
 import AuthService from './services/authservice.ts';
+import ApiService from './services/apiservice.ts';
 import { Roles } from './enums/roles.ts';
 // import { PATHS, ROLE_PATHS } from './Paths.ts';
 
@@ -46,6 +47,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
+  const [sysHealthy, setSysHealthy] = useState(false);
 
   const navigate = useNavigate();
 
@@ -128,22 +130,25 @@ function App() {
 
   useEffect(()=> {
     Modal.setAppElement('#mainBody');
+    setSysHealthy(ApiService.healthCheck());
   }, []);
 
   return (
     <ErrorBoundary FallbackComponent={errorFallback} onError={logError}>
         <div className={mgcStyles.mainBody} id="mainBody">
           <div className={mgcStyles.headerBar}>
-              <span className={mgcStyles.leftContent} id="mainBody_HeaderLeft">
-                  <span className={mgcStyles.headerBarText} id="mainBody_HeaderTitle" onClick={toggleMenu}>&#x2630;</span>
+              <span className={mgcStyles.leftContent}>
+                  <span className={mgcStyles.headerBarText} onClick={toggleMenu}>&#x2630;</span>
               </span>
-              <span className={mgcStyles.rightContent} id="mainBody_HeaderRight">
-                  The Gear Registry
+              <span className={mgcStyles.rightContent}>
+                <span>The Gear Registry</span>
+                <br />
+                <span>{`Hello ${AuthService.displayName()}`}</span>
               </span>
               <br className={mgcStyles.clearBreak} />
           </div>
 
-          { showMenu ?
+          { sysHealthy && showMenu ?
             <div className={mgcStyles.popInMenu}>
               <nav>
                 <Link className={mgcStyles.popInMenuLink} to="/" onClick={toggleMenu}>Home</Link>
